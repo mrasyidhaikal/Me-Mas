@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "MegaGold",
-    "slug": "MegaGold",
+    "name": "Me Gold",
+    "slug": "me-gold",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
