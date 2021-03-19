@@ -24,7 +24,7 @@ const HomeScreen = ({navigation}) => {
                   <Text style={styles.text}>Masuk</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.btnRegis} >
+            <TouchableOpacity style={styles.btnRegis} onPress={() => navigation.navigate('Register') } >
                   <Text style={styles.text}>Daftar</Text>
             </TouchableOpacity>
 

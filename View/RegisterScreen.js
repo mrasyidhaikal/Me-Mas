@@ -11,6 +11,7 @@ import Icon from 'react-native-vector-icons/Ionicons'
 const { width: WIDTH} = Dimensions.get('window');
 
 class Register extends React.Component{
+    
     constructor() {
         super()
         this.state = {
@@ -19,8 +20,13 @@ class Register extends React.Component{
             visibility:false,
             DateDisplay:"",
             TextInputDisableStatus: true,
-            displayFormat: 'DD/MM/YYYY',
-            
+            displayFormat: 'DD-MM-YYYY',
+            namaLengkap:"",
+            alamatLengkap:"",
+            email:"",
+            password:"",
+            konfirmasiPassword:"",
+            nomorHP : "",
      
         }
     }
@@ -45,16 +51,33 @@ class Register extends React.Component{
             this.setState({ showPass: true, press:false })
         }
     }
-
-    render(){
+    PersonalDataToPin =  () => {
         const { navigation } = this.props;
+ 
+        navigation.navigate('pin',{
+            nomorKTP: this.state.nomorKTP,
+            namaLengkap : this.state.namaLengkap,
+            tanggalLahir : this.state.DateDisplay ? moment(this.state.DateDisplay).format(this.state.displayFormat) : '',
+            tempatLahir: this.state.tempatLahir,
+            alamatLengkap : this.state.alamatLengkap,
+            email : this.state.email,
+            password : this.state.password,
+            nomorHP : this.state.nomorHP,
+            konfirmasiPassword : this.state.konfirmasiPassword,
+
+        })
+    
+    }
+    render(){
+     
         const { date } = this.state;
         const { onClose, onChange } = this.props;
         const showMode = (currentMode) => {
             setShow(true);
          
           };
-         
+          
+ 
     return(
       
         <View style={styles.container}>
@@ -75,9 +98,10 @@ class Register extends React.Component{
                 <Text style={styles.LabelInput}>Nomor KTP</Text>
                 <TextInput
                     style={styles.input}
-                    placeholder={'Email'}
+                    placeholder={'Nomor KTP'}
                     placeholderTextColor={'#666872'}
                     underlineColorAndroid='transparent'
+                    onChangeText={val => this.setState({nomorKTP:val})}
                 />
                
                 </View>
@@ -89,6 +113,7 @@ class Register extends React.Component{
                     placeholder={'Nama Lengkap'}
                     placeholderTextColor={'#666872'}
                     underlineColorAndroid='transparent'
+                    onChangeText={val => this.setState({namaLengkap:val})}
                 />
                 </View>
 
@@ -99,6 +124,7 @@ class Register extends React.Component{
                     placeholder={'Tempat Lahir Kamu'}
                     placeholderTextColor={'#666872'}
                     underlineColorAndroid='transparent'
+                    onChangeText={val => this.setState({tempatLahir:val})}
                 />
                 </View>
 
@@ -111,7 +137,8 @@ class Register extends React.Component{
                             placeholderTextColor={'#666872'}
                             underlineColorAndroid='transparent'
                             // pointerEvents="none"
-                            editable={this.state.TextInputDisableStatus}  
+                            editable={this.state.TextInputDisableStatus} 
+                         
                             pointerEvents="none"
                             selectTextOnFocus={false}
                             onTouchStart={this.onPressButton}
@@ -121,34 +148,76 @@ class Register extends React.Component{
                   
                   
                
-                    <DateTimePickerModal mode="date" isVisible={this.state.visibility} onConfirm={this.handleConfirm} onCancel={this.onPressCancel}/>
+                <DateTimePickerModal 
+                mode="date" 
+                isVisible={this.state.visibility} 
+                onConfirm={this.handleConfirm} 
+                onCancel={this.onPressCancel}/>
                 </View>
 
                 <View style={styles.inputContainer}>
-                <Text style={styles.LabelInput}>Tanggal Lahir</Text>
+                <Text style={styles.LabelInput}>Alamat Lengkap</Text>
                 <TextInput
                     style={styles.input}
-                    placeholder={'Tempat Lahir Kamu'}
+                    placeholder={'Alamat Lengkap'}
                     placeholderTextColor={'#666872'}
                     underlineColorAndroid='transparent'
-         
+                    onChangeText={val => this.setState({alamatLengkap:val})}
                 />
         
          
                 </View>
                 <View style={styles.inputContainer}>
-                <Text style={styles.LabelInput}>Tanggal Lahir</Text>
+                <Text style={styles.LabelInput}>Nomor Handphone</Text>
                 <TextInput
                     style={styles.input}
-                    placeholder={'Tempat Lahir Kamu'}
+                    placeholder={'Nomor Hand Phone'}
                     placeholderTextColor={'#666872'}
                     underlineColorAndroid='transparent'
+                    onChangeText={val => this.setState({nomorHP:val})}
+                />
+               
+                </View>
+
+                <View style={styles.inputContainer}>
+                <Text style={styles.LabelInput}>Email</Text>
+                <TextInput
+                    style={styles.input}
+                    placeholder={'Email Kamu'}
+                    placeholderTextColor={'#666872'}
+                    underlineColorAndroid='transparent'
+                    onChangeText={val => this.setState({email:val})}
                 />
                 </View>
 
+                <View style={styles.inputContainer}>
+                    <Text style={styles.LabelInput}>Password</Text>
+                <TextInput
+                    style={styles.input}
+                    placeholder={'Password'}
+                    secureTextEntry = {true}
+                    placeholderTextColor={'#666872'}
+                    underlineColorAndroid='transparent'
+                    onChangeText={val => this.setState({password:val})}
+                />
+                </View>
+                <View style={styles.inputContainer}>
+                    <Text style={styles.LabelInput}>Konfirmasi Password</Text>
+                <TextInput
+                    style={styles.input}
+                    placeholder={'Konfirmasi Password'}
+                    secureTextEntry = {true}
+                    placeholderTextColor={'#666872'}
+                    underlineColorAndroid='transparent'
+                    onChangeText={val => this.setState({konfirmasiPassword:val})}
+                />
+                   
+                </View>
+                
+
                
-            <TouchableOpacity style={styles.btnLogin} onPress={() => navigation.navigate('pin') }>
-                  <Text style={styles.textButton}>Masuk</Text>
+            <TouchableOpacity style={styles.btnLogin} onPress={this.PersonalDataToPin }>
+                  <Text style={styles.textButton}>Selanjutnya</Text>
             </TouchableOpacity>
             </ScrollView>
             </View>
@@ -172,9 +241,10 @@ const styles = StyleSheet.create({
    
     },
     logoContainer : {
+      width: WIDTH - 55,
       height:'20%',
       marginLeft : 40,
-      alignContent:'space-around',
+     
       justifyContent:'center',
     
     },

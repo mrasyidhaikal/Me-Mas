@@ -1,23 +1,40 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { Component } from 'react';
-import {SafeAreaView, StyleSheet, Text, View,Image,Button, Dimensions,TouchableOpacity,TextInput } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-
+import {SafeAreaView, StyleSheet, Text, View,Image,Button, Dimensions,TouchableOpacity,TextInput,Alert } from 'react-native';
+import CallAsyncData from './../Controller/CallAsyncData';
+import CallAPIData from './../Controller/CallAPI';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/Ionicons'
+
 
 const { width: WIDTH} = Dimensions.get('window');
 
+const processResponse = (response)=> {
+  const statusCode = response.status;
+  const data = response.json();
+  return Promise.all([statusCode, data]).then(res => ({
+    statusCode: res[0],
+    data: res[1]
+  }));
+}
 class login extends React.Component{
-  
+    
     constructor() {
         super()
+     
+        
         this.state = {
             showPass:true,
-            press:false
+            press:false,
+            username:"",
+            password:"",
+          
+            isLoading: true,
+ 
         }
     }
-    showPass = () => {
+    showPass = async () => {      
+     
         if (this.state.press == false){
             this.setState({ showPass: false, press:true })
         }else{
@@ -25,6 +42,59 @@ class login extends React.Component{
         }
     }
 
+   
+ 
+  
+
+    onSubmit = async () => {
+      const { navigation } = this.props;
+      
+     try{
+      const response = await CallAPIData.getAPI('http://104.248.156.113:8024/api/v1/Account/login',
+      JSON.stringify({
+        "username": this.state.username,
+        "pw": this.state.password,
+        "rememberme": true,
+        "remembermex": "string",
+        "returnurl": "string",
+        "xuserid": "string",
+        "xsourceid": "string",
+        "xremarks": "string",
+        "xsourcecode": "string",
+        "xempname": "string",
+        "ipaddress": "string",
+        "connid": "string"
+      })
+      )
+              const { data,statusCode } = response;
+
+              if (statusCode == 200){
+               
+                 AsyncStorage.multiSet([
+                  ['objectReturn',JSON.stringify(data)],
+                  ['token',JSON.stringify(data.token)],
+                ])
+                navigation.navigate('AppTabs',{
+                  token : data.token
+                })
+                //dont forget add token
+              }else{
+              
+                Alert.alert('Login Gagal',data.head,[
+                  {text: 'Oke',onPress:() => console.log("closed")}
+                ])
+              } 
+            }
+      catch(error) {
+        console.error(error);
+      }
+      
+      // await AsyncStorage.setItem('username',this.state.username)
+      // await AsyncStorage.setItem('token','abc123')
+    
+    }
+
+        
     render(){
       const { navigation } = this.props;
     return(
@@ -33,13 +103,14 @@ class login extends React.Component{
         <SafeAreaView>
             <View style={styles.logoContainer}>
         <Text style={styles.logoText}>Selamat Datang</Text>
-        <Text style={styles.logoText}>Kembali</Text>
+        <Text style={styles.logoText}>Kembalii</Text>
             </View>
 
             <View style={styles.bottomContainer}>
                 <View style={styles.inputContainer}>
                 <TextInput
                     style={styles.input}
+                    onChangeText={val => this.setState({username:val})}
                     placeholder={'Email'}
                     placeholderTextColor={'#666872'}
                     underlineColorAndroid='transparent'
@@ -51,6 +122,7 @@ class login extends React.Component{
                 <TextInput
                     style={styles.input}
                     placeholder={'Password'}
+                    onChangeText={val => this.setState({password:val})}
                     secureTextEntry = {this.state.showPass}
                     placeholderTextColor={'#666872'}
                     underlineColorAndroid='transparent'
@@ -61,7 +133,7 @@ class login extends React.Component{
                     <Icon name={this.state.press == false ?'ios-eye-outline' : 'ios-eye-off-outline'} size={25} color={'#666872'}/>
                 </TouchableOpacity>
                 </View>
-            <TouchableOpacity onPress={() => navigation.navigate('Login') } style={styles.btnLogin} >
+            <TouchableOpacity onPress={this.onSubmit} style={styles.btnLogin} >
                   <Text style={styles.text}>Masuk</Text>
             </TouchableOpacity>
                 <View style={{flexDirection: 'row', alignItems: 'center',marginTop:20}}>

@@ -4,10 +4,10 @@ import {SafeAreaView, StyleSheet, Text, View,Image,Button, Dimensions,TouchableO
 
 import SmoothPinCodeInput from 'react-native-smooth-pincode-input';
 import Icon from 'react-native-vector-icons/Ionicons';
-import CallAPIData from './../Controller/CallAPI';
+import CallAPIData from './../../Controller/CallAPI';
 const { width: WIDTH} = Dimensions.get('window');
 
-class pin extends React.Component{
+class pinConfirmation extends React.Component{
   
     constructor() {
         super()
@@ -15,51 +15,7 @@ class pin extends React.Component{
             PINCode: "",
         }
     }
-    onSubmit = async () => {
-      
-      const response = await CallAPIData.getAPI('http://104.248.156.113:8024/api/v1/Account/signup',
-        JSON.stringify(
-        {
-          "userid": "",
-          "empname": this.props.route.params.namaLengkap,
-          "usercode": "",
-          "mailaddress": this.props.route.params.email,
-          "username": this.props.route.params.email,
-          "pw": this.props.route.params.password,
-          "confirmPassword": this.props.route.params.konfirmasiPassword,
-          "address": this.props.route.params.alamatLengkap,
-          "no_telp": this.props.route.params.nomorHP,
-          "designationdesc": "",
-          "dinasid": "",
-          "pangkat": "",
-          "noktp": this.props.route.params.nomorKTP,
-          "kotalahir": this.props.route.params.tempatLahir,
-          "tgllahir": this.props.route.params.tanggalLahir,
-          "nopin": this.state.PINCode,
-          "op": "string",
-          "pc": "string",
-          "xuserid": "string",
-          "xsourceid": "string",
-          "xremarks": "string",
-          "xsourcecode": "string",
-          "xempname": "string",
-          "ipaddress": "string",
-          "connid": "string"
-      })
-        )
-        console.log(response)
-        const {data,code} = response
-        if (code == 200) {
-          Alert.alert('Okeeee',data.head,[
-            {text: 'Oke',onPress:() => console.log("closed")}
-          ])
-        }else{
-          Alert.alert('Login Gagal',data.head,[
-            {text: 'Oke',onPress:() => console.log("closed")}
-          ])
-        }
-
-    }
+   
 
     render(){
       const { navigation } = this.props;
@@ -109,7 +65,7 @@ class pin extends React.Component{
 }
 
 
-export default pin
+export default pinConfirmation
 
 
 const styles = StyleSheet.create({
