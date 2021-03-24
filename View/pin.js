@@ -48,8 +48,8 @@ class pin extends React.Component{
       })
         )
         console.log(response)
-        const {data,code} = response
-        if (code == 200) {
+        const {data,statusCode} = response
+        if (statusCode == 200) {
           Alert.alert('Okeeee',data.head,[
             {text: 'Oke',onPress:() => console.log("closed")}
           ])

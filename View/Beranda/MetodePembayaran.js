@@ -25,7 +25,7 @@ class Metode extends React.Component{
     constructor() {
      
         super()
-       
+  
         this.state = {
             showPass:true,
             press:false,
@@ -34,44 +34,45 @@ class Metode extends React.Component{
             bankname : '',
             kategori : '',
             data : [],
+            selectedId:'',
+            harga : 0,
         }
     }
 
     _renderItem =({item,index}) =>{
         
         return(
-           
-          <View style={styles.item}>
-               <TouchableOpacity onPress={this.checkPin}>
+    
+            <TouchableOpacity style={styles.item} onPress={() => this.checkPin(item.bankid,item.urlicon,item.kategori)} >
               <View style={styles.containerBank}>
-                {/* <View >
-                    <Image source={item.nama} style={styles.imageBank}/> 
-                </View> */}
+                <View >
+                    <Image style={styles.imageBank}   
+                    source={{
+                    uri: item.urlicon,
+                    }}/> 
+                </View>
                 <View style={{padding:7}}>
                     <Text style={styles.textBerat}>{item.bankname}</Text>
                     
                 </View>
             </View>
             </TouchableOpacity>
-          </View>
         
         )
     }
-    checkPin = (bankid) =>{
+    checkPin = (bankid,urlicon,kategori) =>{
     const { navigation,route } = this.props;  
     const { hargaBeliToday,token,userid,berat } = route.params;
-    console.log(berat)
-    console.log(hargaBeliToday)
-    console.log(token)
-    console.log(bankid)
-    //navigation.navigate('pinConfirmation',{berat:berat,token:token,userid:userid,hargaBeliToday:hargaBeliToday,bankid:bankid})
+    var harga = berat * hargaBeliToday
+    
+    navigation.navigate('pinConfirmation',{berat:berat,token:token,userid:userid,hargaBeliToday:hargaBeliToday,bankid:bankid,total:harga,urlicon:urlicon,kategori:kategori})
         
     }
     onLogout = async() =>{
         // const { navigation,route } = this.props;  
         // const { hargaBeliToday,token,userid } = route.params;
         
-        var token = this.props.route.params.hargaBeliToday
+        var token = this.props.route.params.token
         //this.setState({token:token})
        // console.log(this.state.token)
         const url = `http://104.248.156.113:8024/api/v1/Dashboard/GetBank`
@@ -91,15 +92,19 @@ class Metode extends React.Component{
         // console.log(response)
 
       }
+      componentDidMount(){
+        this.onLogout()
+      }
     render(){
      
       const { navigation } = this.props;
+ 
     return(
         
         <View style={styles.container}>
            
         <SafeAreaView>
-        <ScrollView>
+     
         <View style={styles.NavBackContainer}>
             <TouchableOpacity onPress={() => navigation.goBack()}>
                 <Icon name={'ios-chevron-back-sharp'} size={25} color={'#fff'}/>
@@ -120,44 +125,14 @@ class Metode extends React.Component{
           data={this.state.data}
           renderItem = {this._renderItem}
           keyExtractor={(item, index)=> index.toString()}
+          extraData={
+            this.state.selectedId     // for single item
+          }
           numColumns = {numColumn}
           />
         </View>
 
-        <View style={styles.NavBackContainer}>
-            <Text style={{color:'#fff',fontWeight:'bold',fontSize:20}}>Keamanan</Text>
-            
-        </View>
         
-        <TouchableOpacity onPress={() => navigation.push('ChangePassword') }>
-          <View style={styles.keamanan}>
-
-            <View style={{flex:0.5,flexDirection:'row',alignItems:'center'}}>    
-                <Icon name={'ios-lock-closed-outline'} size={25} color={'#2EAEBF'} style={styles.inputIcon}/>
-                <Text style={styles.textBerat}> Password</Text>
-            </View>  
-
-            <View style={{flex:0.5,alignItems:'flex-end'}}>
-                <Icon name={'ios-chevron-forward-sharp'} size={25} color={'#fff'}/>
-            </View>
-
-          </View>
-          </TouchableOpacity>
-
-        <TouchableOpacity onPress={this.onLogout}>
-          <View style={styles.keamanan}>
-
-            <View style={{flex:0.5,flexDirection:'row',alignItems:'center'}}>    
-                <Icon name={'ios-lock-closed-outline'} size={25} color={'#2EAEBF'} style={styles.inputIcon}/>
-                <Text style={styles.textBerat}> PIN</Text>
-            </View>  
-
-            <View style={{flex:0.5,alignItems:'flex-end'}}>
-                <Icon name={'ios-chevron-forward-sharp'} size={25} color={'#fff'}/>
-            </View>
-
-          </View>
-          </TouchableOpacity>
       
      
        
@@ -166,7 +141,7 @@ class Metode extends React.Component{
         
        
         
-        </ScrollView>
+       
         </SafeAreaView>  
     
       </View>

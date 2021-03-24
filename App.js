@@ -21,6 +21,8 @@ import Profile from './View/Beranda/Profile';
 import ChangePassword from './View/Beranda/ChangePassword'
 import metodePembayaran from './View/Beranda/MetodePembayaran'
 import pinConfirmation from './View/Beranda/PinConfirmation'
+import detail from './View/Beranda/detail'
+import detailTransaction from './View/Transaksi/detailTransaction'
 // import login from './View/login'
 
 const { width: WIDTH} = Dimensions.get('window');
@@ -73,14 +75,18 @@ const HomeStackScreen = () =>{
     <HomeStack.Screen name="beliEmas"component={BeliEmas}/>
     <HomeStack.Screen name="metodePembayaran"component={metodePembayaran}/>
     <HomeStack.Screen name="pinConfirmation" component={pinConfirmation} />
+    <HomeStack.Screen name="detail" component={detailTransaction} />
   </HomeStack.Navigator>
   )
 }
 
 const TransaksiStackScreen = () =>{
   return(
-  <TransaksiStack.Navigator>
+  <TransaksiStack.Navigator
+  screenOptions={{ gestureEnabled: false, headerShown: false }}
+  >
     <TransaksiStack.Screen name="Transaksi" component={Transaksi}  />
+    <TransaksiStack.Screen name="detailTransaction" component={detailTransaction} />
   </TransaksiStack.Navigator>
   )
 }

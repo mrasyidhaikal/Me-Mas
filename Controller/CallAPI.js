@@ -28,6 +28,22 @@ class CallAPI extends React.Component{
         
             return res   
     }
+    postAPIToken = async(url,isiBody,token) => {
+     
+      let API = await fetch(url, {
+          
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token,
+            },
+            body: isiBody
+            })
+            let res = await processResponse(API)
+        
+            return res   
+    }
     getEmas = async(clientToken,url) => {
       
       let API = await fetch(url, {

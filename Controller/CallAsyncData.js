@@ -26,6 +26,9 @@ class CallData extends React.Component{
             else if (UserData == "nopin") {
               return newData.nopin
             }
+            else if (UserData == "phone") {
+              return newData.phone
+            }
             else if (UserData == "tokenExpire") {
               return moment(newData.tokenExpire).format("YYYY-MM-DD hh:mm")
             }

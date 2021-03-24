@@ -1,22 +1,26 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { Component } from 'react';
-import {SafeAreaView, StyleSheet, Text, View,Image, Dimensions,TouchableOpacity,TextInput,Alert } from 'react-native';
+import {SafeAreaView, StyleSheet, Text, View,Image,Button, Dimensions,TouchableOpacity,TextInput,Alert,FlatList } from 'react-native';
 
-import SmoothPinCodeInput from 'react-native-smooth-pincode-input';
 import Icon from 'react-native-vector-icons/Ionicons';
 import CallAPIData from './../../Controller/CallAPI';
 import CallAsyncData from './../../Controller/CallAsyncData';
+import Clipboard from 'expo-clipboard';
+import moment from 'moment';
 const { width: WIDTH} = Dimensions.get('window');
 const windowHeight = Dimensions.get('window').height;
-class pinConfirmation extends React.Component{
+const numColumn = 1
+class detailTransaction extends React.Component{
   
     constructor() {
         super()
+
         this.state = {
           showPass:true,
           press:false,
            
             berat:0,
+            copiedText:"",
             token:"",
             userid:"",
             hargaBeliToday:0,
@@ -24,6 +28,9 @@ class pinConfirmation extends React.Component{
             total:0,
             urlicon:"",
             pin:"",
+            data:[],
+            total:0,
+            dataBank:{},
         }
     }
     showPass = () => {      
@@ -34,65 +41,71 @@ class pinConfirmation extends React.Component{
           this.setState({ showPass: true, press:false })
       }
   }
-    
-    checkPin = () =>{
+  
+    checkPin = async() =>{
       const { navigation,route } = this.props;  
-      const { berat,token,userid,hargaBeliToday,bankid,total,urlicon } = route.params;
-      //console.log(urlicon)
+      const { transactionID } = route.params;
+
+        const token = await CallAsyncData.getData('token')
+        const url = `http://104.248.156.113:8024/api/v1/Dashboard/GetTransaksi/${transactionID}`
+        const response = await CallAPIData.getEmas(token,url)
+        const {data,statusCode} = response
+        this.setState({data:data,total:data.total})
+        this.getBank()
      
       }
       currencyFormat(num) {
         return 'Rp.' + num.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
      }
-     onSubmit = async () => {
-      const { navigation } = this.props;  
-      const namaUser = await CallAsyncData.getData('name')
-      const emailUser = await CallAsyncData.getData('email')
      
-      const phone = await CallAsyncData.getData('phone')
-      const response = await CallAPIData.getAPI('http://104.248.156.113:8024/api/v1/Dashboard/BeliEmas',
-        JSON.stringify(
-        {
-          "userid": this.props.route.params.userid,
-          "berat": this.props.route.params.berat,
-          "harga": this.props.route.params.total,
-          "total": this.props.route.params.total,
-          "nopin": this.state.pin,
-          "remarks": "string",
-          "nama": namaUser,
-          "email": emailUser,
-          "phone": phone,
-          "bankid": this.props.route.params.bankid,
-          "op": "string",
-          "pc": "string",
-          "xuserid": "string",
-          "xsourceid": "string",
-          "xremarks": "string",
-          "xsourcecode": "string",
-          "xempname": "string",
-          "ipaddress": "string",
-          "connid": "string"
-      }),this.props.route.params.token
-        )
-        console.log(response)
-        const {data,statusCode} = response
-        if (statusCode == 200) {
-          console.log("oke seppppp")
-           navigation.navigate('detail',{transactionID:data.text})
-       
-        }else{
-          Alert.alert('Login Gagal',data.head,[
-            {text: 'Oke',onPress:() => console.log("closed")}
-          ])
-        }
+      copyToClipboard = (nova) => {
+         Clipboard.setString(nova) 
+    }
+    getBank = async() =>{
+      const token = await CallAsyncData.getData('token')
+    
+      const url = `http://104.248.156.113:8024/api/v1/Dashboard/GetBank`
+      const response = await CallAPIData.getEmas(token,url)
+      const {data,statusCode} = response
+    
+      this.setState({dataBank:data})
 
     }
+    _renderItem =({item,index}) =>{
+        if (this.state.data.bankid == item.bankid) {
+          return(
+  
+            <View>
+                <Image style={styles.imageBank}   
+                    source={{
+                    uri: item.urlicon,
+                    }}/> 
+            </View>
+           
+           )
+        }
+  }
+  _renderItem2 =({item,index}) =>{
+    if (this.state.data.bankid == item.bankid) {
+      return(
 
+        <View>
+            <Text style={styles.text}>{item.bankname} {item.kategori}</Text>
+        </View>
+       
+       )
+    }
+}
+    
+    componentDidMount(){
+        this.checkPin()
+       }
     render(){
 
       const { navigation } = this.props;
-      const { PINCode } = this.state;
-      this.checkPin()
+
+
+     
     return(
         
         <View style={styles.container}>
@@ -102,93 +115,96 @@ class pinConfirmation extends React.Component{
                 <Icon name={'ios-chevron-back-sharp'} size={25} color={'#fff'}/>
             </TouchableOpacity>
             <View style={{flexDirection:'row', justifyContent:'space-between'}}>
-            <Text style={styles.logoText}>Konfirmasi Pembelian</Text>
+            <Text style={styles.logoText}>Selesaikan Pembayaran</Text>
            
             </View>
          
         </View>
-        <View style={styles.detailHarga}>
-                  <View style={styles.row}>
-                  <Text style={styles.text}>Berat Emas</Text>
-                  <Text style={styles.text}>{Number((this.props.route.params.berat).toFixed(4))}/gr</Text>
-                </View>
-        </View>
+      
 
         <View style={styles.detailHarga}>
                   <View style={styles.row}>
-                    <Text style={styles.text}>Total Pembelian</Text>
-                    <Text style={styles.text}>{this.currencyFormat(this.props.route.params.total)}</Text>
+                    <Text style={styles.text}>No Transaksi</Text>
+                    <Text style={styles.text}>{this.state.data.transaksicode}</Text>
                   </View>
                   <View style={styles.row}>
-                    <View style={styles.row}>
-                    <Text style={styles.text}>Biaya VA</Text>
-                    </View>
-                    <View>
-                    <Text style={styles.text}>{this.currencyFormat(4500)}</Text>
-                    </View>
+                    <Text style={styles.text}>Berat Emas</Text>
+                    <Text style={styles.text}>{this.state.data.berat} gr</Text>
                   </View>
                   <View style={styles.row}>
                     <Text style={styles.text}>Total Pembayaran</Text>
-                    <Text style={styles.text}>{this.currencyFormat(this.props.route.params.total + 4500)}</Text>
+                    <Text style={styles.text}>{this.currencyFormat(this.state.total)}</Text>
                   </View>
         </View>
         <View style={styles.detailHarga}>
                   <View style={styles.row}>
-                  <Image style={styles.imageBank}   
+                  {/* <Image style={styles.imageBank}   
                     source={{
-                    uri: this.props.route.params.urlicon,
-                    }}/> 
+                    uri: ,
+                    }}/>  */}
                  
                  <View style={{marginTop:8}}> 
-                  <Text style={styles.text}>{this.props.route.params.kategori}</Text>
+       
+                  <FlatList
+                    data={this.state.dataBank}
+                    renderItem = {this._renderItem2}
+                    keyExtractor={(item, index)=> index.toString()}
+                  
+                    numColumns = {numColumn}
+                />
+                  
                 </View>
                 </View>
 
                 <View style={styles.row}>
-                  <View style={{marginTop:10}}>
-                    <Text style={styles.text}>Konfirmasi PIN</Text>
-                    </View>
-                <View style={styles.inputContainer}>
+                  <View>
+
+                <FlatList
+                    data={this.state.dataBank}
+                    renderItem = {this._renderItem}
+                    keyExtractor={(item, index)=> index.toString()}
+                  
+                    numColumns = {numColumn}
+                />
+
+                  </View>
+                <TouchableOpacity style={styles.inputContainer} onPress={this.copyToClipboard(this.state.data.nova)}>
                 <TextInput
                     style={styles.input}
-                    placeholder={'PIN'}
-                    maxLength={6}
-                    onChangeText={val => this.setState({pin:val})}
-                    secureTextEntry = {this.state.showPass}
+                    value = {this.state.data.nova}
                     placeholderTextColor={'#666872'}
                     underlineColorAndroid='transparent'
                     keyboardType = {'number-pad'}
+                    editable = {false}
                 />
-      
-
-                <TouchableOpacity style={styles.btnEye} onPress={this.showPass.bind(this)}>
-                    <Icon name={this.state.press == false ?'ios-eye-outline' : 'ios-eye-off-outline'} size={25} color={'#666872'}/>
-                </TouchableOpacity>
+                <View style={styles.btnEye}>
+                    <Icon name={'ios-copy-outline'} size={25} color={'#6c62cc'}/>
                 </View>
+                </TouchableOpacity>
                   </View>
                
         </View>
 
         <View style={styles.detailText}>
+        <Text style={styles.deadlineText}>Selesaikan Pembayaranmu sebelum {moment(this.state.data.transaksidate).format("hh YYYY-MM-DD")}</Text>
             <View style={styles.rowText}>
-              <Text style={styles.textDetail}>1.</Text>
-              <Text style={styles.textDetail}>Pastikan data sudah benar,lalu selesaikan pembayaran</Text>
+              <Text style={styles.textDetail}>-</Text>
+              <Text style={styles.textDetail}>Kamu memiliki Waktu 3 Jam sejak melakukan pembelian Emas ,segera lakukan Pembayaran</Text>
             </View>
             <View style={styles.rowText}>
-            <Text style={styles.textDetail}>2.</Text>
-            <Text style={styles.textDetail}>Nomor Virtual account akan Muncul di halaman selanjutnya</Text>
+            <Text style={styles.textDetail}>-</Text>
+            <Text style={styles.textDetail}>Pembayaran ini membutuhkan konfirmasi setelah bayar . Jumlah emas mu akan otomatis bertambah ketika pembayaran mu berhasil</Text>
             </View>
-             
+            <View style={styles.rowText}>
+            <Text style={styles.textDetail}>-</Text>
+            <Text style={styles.textDetail}>Detail Transaksi ini dapat kamu lihat di menu "Transaksi"</Text>
+            </View>
         </View>
           
         
       
 
-            <View style={{alignSelf:'center'}}>
-            <TouchableOpacity onPress={this.onSubmit} style={styles.btnLogin} >
-                  <Text style={styles.textButton}>Lanjut</Text>
-            </TouchableOpacity>
-            </View>
+          
             
 
 
@@ -201,7 +217,7 @@ class pinConfirmation extends React.Component{
 }
 
 
-export default pinConfirmation
+export default detailTransaction
 
 
 const styles = StyleSheet.create({
@@ -229,13 +245,13 @@ const styles = StyleSheet.create({
     marginTop:0,
   },
   input: {
-   width:WIDTH/2.5,
+    width:WIDTH / 2,
     height:40,
     borderRadius:10,
     fontSize:16,
     paddingLeft:10,
     backgroundColor:'#fff',
-    borderColor:'#000',
+    borderColor:'#6c62cc',
     borderWidth:1,
     color:'#000',
    
@@ -282,6 +298,14 @@ const styles = StyleSheet.create({
       fontWeight:'bold',
       fontSize : 25,
       marginTop: 5 ,
+    //  fontFamily: 'Roboto-Bold',
+      textAlign: 'left'
+    },
+    deadlineText: {
+      color : '#FD7557',
+      fontWeight:'bold',
+      fontSize : 20,
+     
     //  fontFamily: 'Roboto-Bold',
       textAlign: 'left'
     },

@@ -64,6 +64,8 @@ class login extends React.Component{
       const tokenExpire = await CallAsyncData.getData('tokenExpire')
       const token = await CallAsyncData.getData('token')
       const userid = await CallAsyncData.getData('userid')
+
+
       this.setState({namaUser :namaUser,tokenExpire:tokenExpire,token:token,userid:userid})
       this.getHarga()
     

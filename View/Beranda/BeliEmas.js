@@ -188,7 +188,6 @@ class BeliEmas extends React.Component{
               data={harga}
               extraData={
                 this.state.selectedId     // for single item
-              
               }
               renderItem = {this._renderItem}
               keyExtractor={(item, index)=> index.toString()}
