@@ -116,7 +116,7 @@ class Profile extends React.Component{
           </View>
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => navigation.push('DataRekening') }>
+          <TouchableOpacity >
           <View style={styles.keamanan}>
 
             <View style={{flex:0.5,flexDirection:'row',alignItems:'center'}}>    

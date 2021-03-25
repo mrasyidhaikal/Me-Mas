@@ -208,7 +208,7 @@ class login extends React.Component{
               </TouchableOpacity>
              
               <TouchableOpacity style={styles.cardTransactionContentJual}>
-                    <Icon name={'trending-down-sharp'} size={54} color={'#fff'} onPress={() => navigation.navigate('JualEmas') } />
+                    <Icon name={'trending-down-sharp'} size={54} color={'#fff'} onPress={() => navigation.navigate('jualEmas',{hargaJualToday:this.state.hargaJualToday,token:this.state.token,userid:this.state.userid,saldoUang:this.state.saldoUang,userSaldo:this.state.userSaldo}) } />
                     <Text style={styles.text}>Jual</Text>
               </TouchableOpacity>
              

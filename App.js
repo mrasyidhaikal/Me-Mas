@@ -76,6 +76,7 @@ const HomeStackScreen = () =>{
     <HomeStack.Screen name="metodePembayaran"component={metodePembayaran}/>
     <HomeStack.Screen name="pinConfirmation" component={pinConfirmation} />
     <HomeStack.Screen name="detail" component={detailTransaction} />
+    <HomeStack.Screen name="jualEmas" component={JualEmas} />
   </HomeStack.Navigator>
   )
 }
