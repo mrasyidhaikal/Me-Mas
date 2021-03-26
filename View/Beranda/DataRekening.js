@@ -19,6 +19,7 @@ class DataRekening extends React.Component{
             showPass:true,
             press:false,
             data:[],
+            selectedId:'',
         }
     }
     showPass = () => {
@@ -44,10 +45,10 @@ class DataRekening extends React.Component{
         }
     
         _renderItem =({item,index}) =>{
-        
+          const { navigation } = this.props;
             return(
         
-                <TouchableOpacity style={styles.item} >
+                <TouchableOpacity style={styles.item}  onPress={() => navigation.navigate('UpdateKartu',{bankuserid:item.bankuserid,bankname:item.bankname,norek:item.norekning,namapemilik:item.namapemilik})}>
             <ImageBackground source={require('./../../assets/paycard.png')} style={styles.image}>
                   <View style={styles.containerBank}>
                     {/* <View >
@@ -103,9 +104,9 @@ class DataRekening extends React.Component{
                 data={this.state.data}
                 renderItem = {this._renderItem}
                 keyExtractor={(item, index)=> index.toString()}
-                // extraData={
-                //     this.state.selectedId     // for single item
-                // }
+                extraData={
+                  this.state.selectedId    // for single item
+                }
                 numColumns = {numColumn}
                 />
            

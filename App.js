@@ -26,6 +26,7 @@ import detail from './View/Beranda/detail'
 import detailTransaction from './View/Transaksi/detailTransaction'
 import DataRekening from './View/Beranda/DataRekening'
 import TambahKartu from './View/Beranda/TambahKartu'
+import UpdateKartu from './View/Beranda/UpdateKartu'
 // import login from './View/login'
 
 const { width: WIDTH} = Dimensions.get('window');
@@ -102,7 +103,7 @@ const HomeStackScreen = ({navigation,route}) =>{
       component={IsiHomeStacks}
     /> */}
 
-
+    <HomeStack.Screen name="UpdateKartu" component={UpdateKartu} />
     <HomeStack.Screen name="DataRekening" component={DataRekening} />
     <HomeStack.Screen name="TambahKartu" component={TambahKartu} />
 
