@@ -50,7 +50,7 @@ class pinConfirmation extends React.Component{
       const emailUser = await CallAsyncData.getData('email')
      
       const phone = await CallAsyncData.getData('phone')
-      const response = await CallAPIData.getAPI('http://104.248.156.113:8024/api/v1/Dashboard/BeliEmas',
+      const response = await CallAPIData.postAPIToken('http://104.248.156.113:8024/api/v1/Dashboard/BeliEmas',
         JSON.stringify(
         {
           "userid": this.props.route.params.userid,

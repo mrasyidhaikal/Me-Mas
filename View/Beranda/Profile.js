@@ -80,11 +80,30 @@ class Profile extends React.Component{
           numColumns = {numColumn}
           />
         </View>
+        <View style={styles.NavBackContainer}>
+            <Text style={{color:'#fff',fontWeight:'bold',fontSize:20}}>Data Rekening</Text>
+            
+        </View>
+        <TouchableOpacity onPress={() => navigation.navigate('DataRekening') }>
+             <View style={styles.keamanan}>
+
+            <View style={{flex:0.5,flexDirection:'row',alignItems:'center'}}>    
+                <Icon name={'ios-card-outline'} size={25} color={'#2EAEBF'} style={styles.inputIcon}/>
+                <Text style={styles.textBerat}> Data Rekning</Text>
+            </View>  
+
+            <View style={{flex:0.5,alignItems:'flex-end'}}>
+                <Icon name={'ios-chevron-forward-sharp'} size={25} color={'#fff'}/>
+            </View>
+
+          </View>
+        </TouchableOpacity>
 
         <View style={styles.NavBackContainer}>
             <Text style={{color:'#fff',fontWeight:'bold',fontSize:20}}>Keamanan</Text>
             
         </View>
+        
         
         <TouchableOpacity onPress={() => navigation.push('ChangePassword') }>
           <View style={styles.keamanan}>
