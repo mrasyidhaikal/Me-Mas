@@ -62,7 +62,6 @@ class Transaksi extends React.Component{
                 <Text style={styles.text}>Gram</Text>
                 <Text style={{color:'#fff',fontSize:16}}>{item.berat+" gr"}</Text>
               </View>
-             
               <View>
                 <Text style={styles.text}>Tanggal</Text>
                 <Text style={{color:'#fff',fontSize:16}}>{moment(item.transaksidate).format("YYYY-MM-DD")}</Text>

@@ -242,8 +242,7 @@ const styles = StyleSheet.create({
       marginLeft:20,
       marginTop:windowHeight / 20,
       paddingBottom:20,
-  
-  },
+    },
   inputIcon:{
     position: 'absolute',
    

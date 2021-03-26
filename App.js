@@ -4,6 +4,7 @@ import {SafeAreaView, StyleSheet, Text, View,Image,Button, Dimensions,TouchableO
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 
 
 import Icon from 'react-native-vector-icons/Ionicons'
@@ -33,6 +34,22 @@ const RegisterStack = createStackNavigator();
 const HomeStack = createStackNavigator();
 const TransaksiStack = createStackNavigator();
 const IsiHomeStack = createStackNavigator();
+
+const IsiHomeStacks = () => {
+  return(
+    <IsiHomeStack.Navigator
+    screenOptions={{ gestureEnabled: false, headerShown: false }}
+    >
+      <IsiHomeStack.Screen name="Grafik" component={GrafikScreen}  />
+        <IsiHomeStack.Screen name="Profile" component={Profile}  />
+        <IsiHomeStack.Screen name="beliEmas"component={BeliEmas}/>
+        <IsiHomeStack.Screen name="metodePembayaran"component={metodePembayaran}/>
+        <IsiHomeStack.Screen name="pinConfirmation" component={pinConfirmation} />
+        <IsiHomeStack.Screen name="detail" component={detailTransaction} />
+        <IsiHomeStack.Screen name="jualEmas" component={JualEmas} />
+    </IsiHomeStack.Navigator>
+    )
+} 
 
 const RegisterTab = () => {
   return(
@@ -64,19 +81,35 @@ const RegisterTab = () => {
   );
 }
 
-const HomeStackScreen = () =>{
+const HomeStackScreen = ({navigation,route}) =>{
+  // const { navigation,route } = this.props;  
+  // const routeName = getFocusedRouteNameFromRoute(route);
+  // console.log(routeName)
+  // switch(routeName){
+  //   case 'undefined':
+      // navigation.setOptions({tabBarVisible: false});
+  //   case 'Beranda':
+  //     navigation.setOptions({tabBarVisible: true});
+  //   default:
+  //     navigation.setOptions({tabBarVisible: false});
+  // }
+
+  // if(route.state && route.state.index > 0){
+  //   navigation.setOptions({tabBarVisible : false})
+  // }else{
+  //   navigation.setOptions({tabBarVisible : true})
+  // }
+
   return(
   <HomeStack.Navigator
   screenOptions={{ gestureEnabled: false, headerShown: false }}
   >
     <HomeStack.Screen name="Beranda" component={Beranda}  />
-    <HomeStack.Screen name="Grafik" component={GrafikScreen}  />
-    <HomeStack.Screen name="Profile" component={Profile}  />
-    <HomeStack.Screen name="beliEmas"component={BeliEmas}/>
-    <HomeStack.Screen name="metodePembayaran"component={metodePembayaran}/>
-    <HomeStack.Screen name="pinConfirmation" component={pinConfirmation} />
-    <HomeStack.Screen name="detail" component={detailTransaction} />
-    <HomeStack.Screen name="jualEmas" component={JualEmas} />
+    <HomeStack.Screen 
+      name="IsiHomeStack" 
+      component={IsiHomeStacks}
+    />
+
   </HomeStack.Navigator>
   )
 }

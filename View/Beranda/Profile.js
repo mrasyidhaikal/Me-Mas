@@ -115,25 +115,6 @@ class Profile extends React.Component{
 
           </View>
           </TouchableOpacity>
-
-          <TouchableOpacity onPress={() => navigation.push('DataRekening') }>
-          <View style={styles.keamanan}>
-
-            <View style={{flex:0.5,flexDirection:'row',alignItems:'center'}}>    
-                <Icon name={'md-card-outline'} size={25} color={'#2EAEBF'} style={styles.inputIcon}/>
-                <Text style={styles.textBerat}> Data Rekening</Text>
-            </View>  
-
-            <View style={{flex:0.5,alignItems:'flex-end'}}>
-                <Icon name={'ios-chevron-forward-sharp'} size={25} color={'#fff'}/>
-            </View>
-
-          </View>
-          </TouchableOpacity>
-      
-     
-       
-
          
         
           <TouchableOpacity onPress={this.onLogout}>
