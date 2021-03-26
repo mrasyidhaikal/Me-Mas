@@ -24,6 +24,8 @@ import metodePembayaran from './View/Beranda/MetodePembayaran'
 import pinConfirmation from './View/Beranda/PinConfirmation'
 import detail from './View/Beranda/detail'
 import detailTransaction from './View/Transaksi/detailTransaction'
+import DataRekening from './View/Beranda/DataRekening'
+import TambahKartu from './View/Beranda/TambahKartu'
 // import login from './View/login'
 
 const { width: WIDTH} = Dimensions.get('window');
@@ -88,6 +90,7 @@ const HomeStackScreen = ({navigation,route}) =>{
   >
     <HomeStack.Screen name="Beranda" component={Beranda}  />
     <HomeStack.Screen name="Grafik" component={GrafikScreen}  />
+
         <HomeStack.Screen name="Profile" component={Profile}  />
         <HomeStack.Screen name="beliEmas"component={BeliEmas}/>
         <HomeStack.Screen name="metodePembayaran"component={metodePembayaran}/>
@@ -98,6 +101,10 @@ const HomeStackScreen = ({navigation,route}) =>{
       name="IsiHomeStack" 
       component={IsiHomeStacks}
     /> */}
+
+
+    <HomeStack.Screen name="DataRekening" component={DataRekening} />
+    <HomeStack.Screen name="TambahKartu" component={TambahKartu} />
 
   </HomeStack.Navigator>
   )

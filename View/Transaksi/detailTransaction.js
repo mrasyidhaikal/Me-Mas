@@ -31,7 +31,9 @@ class detailTransaction extends React.Component{
             data:[],
             total:0,
             dataBank:{},
+
             dateTransaksi:Date(),
+
         }
     }
     showPass = () => {      
@@ -51,12 +53,12 @@ class detailTransaction extends React.Component{
         const url = `http://104.248.156.113:8024/api/v1/Dashboard/GetTransaksi/${transactionID}`
         const response = await CallAPIData.getEmas(token,url)
         const {data,statusCode} = response
-        this.setState({data:data,total:data.total})
+        this.setState({data:data,total:data.total,transaksidate:data.transaksidate})
         this.getBank()
-        
         var dateTransaksii = new Date(this.state.data.transaksidate)
         this.setState({dateTransaksi:moment(dateTransaksii).add(3, "hours").format("YYYY-MM-DD HH:mm")})
         
+
       }
       currencyFormat(num) {
         return 'Rp.' + num.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
@@ -197,7 +199,9 @@ class detailTransaction extends React.Component{
         </View>
 
         <View style={styles.detailText}>
+
         <Text style={styles.deadlineText}>Selesaikan Pembayaranmu sebelum {this.state.dateTransaksi} WIB</Text>
+
             <View style={styles.rowText}>
               <Text style={styles.textDetail}>-</Text>
               <Text style={styles.textDetail}>Kamu memiliki Waktu 3 Jam sejak melakukan pembelian Emas ,segera lakukan Pembayaran</Text>
