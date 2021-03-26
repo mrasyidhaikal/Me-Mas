@@ -138,7 +138,7 @@ class login extends React.Component{
            </View>
 
            <View style={styles.header}>
-                <TouchableOpacity onPress={() => navigation.push('IsiHomeStack',{screen : "Profile"})}> 
+                <TouchableOpacity onPress={() => navigation.push("Profile")}> 
                 <Image source={require("./../../assets/profile.png")}/>
                 </TouchableOpacity>
                 <View style={styles.welcome}>
@@ -193,7 +193,7 @@ class login extends React.Component{
 
 
                 <View style={styles.grafik}>
-                  <TouchableOpacity style={styles.containerGrafik} onPress={() => navigation.navigate('IsiHomeStack',{screen : "Grafik"}) }> 
+                  <TouchableOpacity style={styles.containerGrafik} onPress={() => navigation.navigate("Grafik") }> 
                             <Icon name={'analytics-sharp'} size={26} color={'#2EAEBF'} />
                             <Text style={{fontSize:12,color:'#2EAEBF',fontWeight:'bold'}}>Lihat Grafik</Text>
                     </TouchableOpacity>
