@@ -7,6 +7,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/Ionicons'
 
 const { width: WIDTH} = Dimensions.get('window');
+const windowHeight = Dimensions.get('window').height;
 const harga = [{key:'100rb'},{key:'250rb'},{key:'500rb'},{key:'750rb'},{key:'1jt'},{key:'Lainnya'}]
 const numColumn = 3
 class BeliEmas extends React.Component{
@@ -129,6 +130,7 @@ const styles = StyleSheet.create({
       marginLeft : 30,
       alignContent:'space-around',
       justifyContent:'center',
+      marginTop:windowHeight / 20,
     
     },
     detailHarga:{

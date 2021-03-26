@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { Component } from 'react';
-import {SafeAreaView, StyleSheet, Text, View,Image, Dimensions,TouchableOpacity,TextInput,FlatList,ScrollView } from 'react-native';
+import {SafeAreaView, StyleSheet, Text, View,Image, Dimensions,TouchableOpacity,TextInput,FlatList,ScrollView,refreshControl, RefreshControl } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -30,6 +30,7 @@ class Transaksi extends React.Component{
             data : [],
             selectedId:'',
             harga : 0,
+            refreshing: false,
         }
     }
 
@@ -90,7 +91,17 @@ class Transaksi extends React.Component{
         const {data,statusCode} = response
         this.setState({data:data})
       
+        if(statusCode == 200){
+         this.setState({ refreshing: false })
+        }
     
+    }
+
+    setRefreshing = () =>{
+      if(this.state.refreshing == false){
+         this.setState({ refreshing: true })
+         this.onLoad()
+       }
     }
 
     getBank = () => {
@@ -114,32 +125,39 @@ class Transaksi extends React.Component{
         <View style={styles.container}>
            
         <SafeAreaView>
-     
-        <View style={styles.NavBackContainer}>
-           
-            <View>
-            <Text style={styles.logoText}>Transaksi</Text>
-           
-            </View>
-         
-        </View>
+          <ScrollView
+            refreshControl={
+              <RefreshControl
+                refreshing={this.state.refreshing}
+                onRefresh={this.setRefreshing}
+              />
+            }
+          >
+              <View style={styles.NavBackContainer}>
+                
+                  <View>
+                  <Text style={styles.logoText}>Transaksi</Text>
+                
+                  </View>
+              
+              </View>
 
-        
-        <View style={styles.NavBackContainer}>
-      
-        </View>
-        <View>
-        <FlatList
-          data={this.state.data}
-          renderItem = {this._renderItem}
-          keyExtractor={(item, index)=> index.toString()}
-          extraData={
-            this.state.selectedId     // for single item
-          }
-          numColumns = {numColumn}
-          />
-        </View>
-       
+              
+              <View style={styles.NavBackContainer}>
+            
+              </View>
+              <View>
+              <FlatList
+                data={this.state.data}
+                renderItem = {this._renderItem}
+                keyExtractor={(item, index)=> index.toString()}
+                extraData={
+                  this.state.selectedId     // for single item
+                }
+                numColumns = {numColumn}
+                />
+              </View>
+          </ScrollView>
         </SafeAreaView>  
     
       </View>

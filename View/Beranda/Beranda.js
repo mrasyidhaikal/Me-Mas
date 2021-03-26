@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {SafeAreaView, StyleSheet, Text, View,Image,Button, Dimensions,TouchableOpacity,TextInput, StatusBar,ScrollView } from 'react-native';
+import {SafeAreaView, StyleSheet, Text, View,Image,Button, Dimensions,TouchableOpacity,TextInput, StatusBar,ScrollView, RefreshControl } from 'react-native';
 import Logout from './../../Controller/Logout';
 import CallAsyncData from './../../Controller/CallAsyncData';
 import CallAPIData from './../../Controller/CallAPI';
@@ -34,6 +34,7 @@ class login extends React.Component{
             warnaJual : "#fff",
             userSaldo :0,
             saldoUang:0,
+            refreshing: false,
            
         }
     }
@@ -92,6 +93,11 @@ class login extends React.Component{
       this.checkDownOrUpJual()
       this.getSaldo()
      
+      if(statusCode == 200 ){
+        this.setState({ refreshing: false })
+      }
+
+
     }
     checkDownOrUpBeli(){
       if (this.state.beliPersen < 0) {
@@ -121,7 +127,12 @@ class login extends React.Component{
       return 'Rp.' + num.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
    }
 
-    
+   setRefreshing = () =>{
+     if(this.state.refreshing == false){
+        this.setState({ refreshing: true })
+        this.getHarga()
+      }
+   }
     render(){
     
       const { navigation } = this.props;
@@ -132,6 +143,12 @@ class login extends React.Component{
         <ScrollView
                 style={styles.contentContainer}
                 showsVerticalScrollIndicator={true}
+                refreshControl={
+                  <RefreshControl
+                    refreshing={this.state.refreshing}
+                    onRefresh={this.setRefreshing}
+                  />
+                }
               >
            <View style={styles.logoContainer}>
             <Image source={require("./../../assets/logoHome.png")}/>
