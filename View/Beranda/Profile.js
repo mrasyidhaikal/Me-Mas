@@ -89,7 +89,7 @@ class Profile extends React.Component{
 
             <View style={{flex:0.5,flexDirection:'row',alignItems:'center'}}>    
                 <Icon name={'ios-card-outline'} size={25} color={'#2EAEBF'} style={styles.inputIcon}/>
-                <Text style={styles.textBerat}> Data Rekning</Text>
+                <Text style={styles.textBerat}> Data Rekening</Text>
             </View>  
 
             <View style={{flex:0.5,alignItems:'flex-end'}}>

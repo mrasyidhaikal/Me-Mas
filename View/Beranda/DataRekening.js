@@ -1,11 +1,13 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { Component } from 'react';
-import {SafeAreaView, StyleSheet, Text, View,Image, Dimensions,TouchableOpacity,TextInput,FlatList,ScrollView,ImageBackground } from 'react-native';
+import {SafeAreaView, StyleSheet, Text, View,Image, Dimensions,TouchableOpacity,TextInput,FlatList,ScrollView,ImageBackground,RefreshControl } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import CallAsyncData from './../../Controller/CallAsyncData';
 import CallAPIData from './../../Controller/CallAPI';
 import Icon from 'react-native-vector-icons/Ionicons'
+import react from 'react';
+import { withRepeat } from 'react-native-reanimated';
 
 const { width: WIDTH} = Dimensions.get('window');
 const windowHeight = Dimensions.get('window').height;
@@ -19,7 +21,11 @@ class DataRekening extends React.Component{
             showPass:true,
             press:false,
             data:[],
+
+            refreshing: false,
+
             selectedId:'',
+
         }
     }
     showPass = () => {
@@ -39,7 +45,11 @@ class DataRekening extends React.Component{
           const {data,statusCode} = response
          
           this.setState({data:data})
-      
+          console.log(statusCode)
+
+          if(statusCode == 200){
+              this.setState({ refreshing: false })
+          }
 
          
         }
@@ -77,9 +87,16 @@ class DataRekening extends React.Component{
         }
     
     componentDidMount(){
-            this.getDataRekening()
+      // this.setState({ refreshing: true })
+      this.getDataRekening()
     }
- 
+    
+    setRefreshing = () =>{
+      if(this.state.refreshing == false){
+         this.setState({ refreshing: true })
+         this.getDataRekening()
+       }
+    }
    
     render(){
       const { navigation } = this.props;
@@ -88,7 +105,14 @@ class DataRekening extends React.Component{
         <View style={styles.container}>
            
         <SafeAreaView>
-        <ScrollView>
+        <ScrollView
+          refreshControl={
+            <RefreshControl
+              refreshing={this.state.refreshing}
+              onRefresh={this.setRefreshing}
+            />
+          }
+        >
         <View style={styles.NavBackContainer}>
             <TouchableOpacity onPress={() => navigation.goBack()}>
                 <Icon name={'ios-chevron-back-sharp'} size={25} color={'#fff'}/>
@@ -104,10 +128,12 @@ class DataRekening extends React.Component{
                 data={this.state.data}
                 renderItem = {this._renderItem}
                 keyExtractor={(item, index)=> index.toString()}
+
                 extraData={
                   this.state.selectedId    // for single item
                 }
                 numColumns = {numColumn}
+
                 />
            
         </View>

@@ -8,6 +8,7 @@ import Icon from 'react-native-vector-icons/Ionicons'
 import { render } from 'react-dom';
 
 const { width: WIDTH} = Dimensions.get('window');
+const windowHeight = Dimensions.get('window').height;
 const harga = [{id:'1',key:'100rb',value:100000},{id:'2',key:'250rb',value:250000},{id:'3',key:'500rb',value:500000},{id:'4',key:'750rb',value:750000},{id:'5',key:'1jt',value:1000000},{id:'6',key:'Lainnya',value:0}]
 const numColumn = 3
 
@@ -222,6 +223,7 @@ const styles = StyleSheet.create({
     NavBackContainer : {
       marginTop:50,
       marginLeft : 30,
+      marginTop:windowHeight / 20,
       alignContent:'space-around',
       justifyContent:'center',
     

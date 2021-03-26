@@ -1,5 +1,5 @@
 import React, { Component,useState } from 'react';
-import {SafeAreaView, StyleSheet, Text, View,Image,Button, Dimensions,TouchableOpacity,TextInput, StatusBar,ScrollView,FlatList } from 'react-native';
+import {SafeAreaView, StyleSheet, Text, View,Image,Button, Dimensions,TouchableOpacity,TextInput, StatusBar,ScrollView,FlatList,RefreshControl } from 'react-native';
 import { LineChart } from "react-native-chart-kit";
 import { Rect, Text as TextSVG, Svg } from "react-native-svg";
 import Icon from 'react-native-vector-icons/Ionicons'
@@ -20,6 +20,7 @@ const windowHeight = Dimensions.get('window').height;
         
         <View style={styles.container}>
         <SafeAreaView>
+          <ScrollView>
             <View style={styles.NavBackContainer}>
             <TouchableOpacity onPress={() => navigation.goBack()}>
                 <Icon name={'ios-chevron-back-sharp'} size={25} color={'#fff'}/>
@@ -75,9 +76,9 @@ const windowHeight = Dimensions.get('window').height;
                                   821.000,
                                   776.000,
                                   806.000,
-                                  616.100,
+                                  716.100,
                                   816.000,
-                                  616.100,
+                                  750.100,
                                   816.000,
                              ]
                         }
@@ -221,7 +222,7 @@ const windowHeight = Dimensions.get('window').height;
         </View>
       </View>
             <StatusBar barStyle="light-content"/>
-
+        </ScrollView>
         </SafeAreaView>  
         
        

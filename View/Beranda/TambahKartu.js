@@ -21,7 +21,7 @@ class TambahKartu extends React.Component{
             press:false,
             norek:'',
             namarek:'',
-            kodeBank : '',
+            kodeBank : 'Bank Mandiri',
         }
     }
     showPass = () => {
@@ -51,11 +51,11 @@ class TambahKartu extends React.Component{
             "ipaddress": "string",
             "connid": "string"
         }),token)
-        console.log(response)
+        
         const {data,statusCode} = response
-
+        
         if (statusCode == 200) {
-            navigation.navigate('DataRekening') 
+            this.props.navigation.navigate('DataRekening')
         }
     }
   
@@ -82,12 +82,12 @@ class TambahKartu extends React.Component{
 
         <View >
         <Picker
+            mode="dropdown"
             selectedValue={this.state.kodeBank}
             style={styles.input}
             onValueChange={(itemValue, itemIndex) =>
                 this.setState({kodeBank: itemValue})
             }>
-         
             <Picker.Item label="Bank Mandiri" value="Bank Mandiri" />
             <Picker.Item label="Bank BNI" value="Bank BNI" />
             <Picker.Item label="Bank Artha Graha Internasional" value="Bank Artha Graha Internasional" />
