@@ -20,7 +20,7 @@ class Register extends React.Component{
             visibility:false,
             DateDisplay:"",
             TextInputDisableStatus: true,
-            displayFormat: 'DD-MM-YYYY',
+            displayFormat: 'YYYY-MM-DD',
             namaLengkap:"",
             alamatLengkap:"",
             email:"",
@@ -98,6 +98,7 @@ class Register extends React.Component{
                 <Text style={styles.LabelInput}>Nomor KTP</Text>
                 <TextInput
                     style={styles.input}
+                    keyboardType = 'number-pad'
                     placeholder={'Nomor KTP'}
                     placeholderTextColor={'#666872'}
                     underlineColorAndroid='transparent'
@@ -172,6 +173,7 @@ class Register extends React.Component{
                 <TextInput
                     style={styles.input}
                     placeholder={'Nomor Hand Phone'}
+                    keyboardType = 'number-pad'
                     placeholderTextColor={'#666872'}
                     underlineColorAndroid='transparent'
                     onChangeText={val => this.setState({nomorHP:val})}

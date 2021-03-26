@@ -1,21 +1,13 @@
 import React, { Component,useState } from 'react';
 import {SafeAreaView, StyleSheet, Text, View,Image,Button, Dimensions,TouchableOpacity,TextInput, StatusBar,ScrollView,FlatList } from 'react-native';
-
-
 import { LineChart } from "react-native-chart-kit";
 import { Rect, Text as TextSVG, Svg } from "react-native-svg";
-
 import Icon from 'react-native-vector-icons/Ionicons'
 
 const { width: WIDTH} = Dimensions.get('window');
-
-
+const windowHeight = Dimensions.get('window').height;
   export const dataChart = ["May","June","July","Aug","Sept","Oct","Oct","Oct","Oct","Oct",]
-
-
   export const {width: SIZE} = Dimensions.get('window')
-
-
   const Charts = ({ navigation }) =>{
   
     
@@ -71,7 +63,7 @@ const { width: WIDTH} = Dimensions.get('window');
              <View>
                <LineChart
                 data={{
-                    labels: ["May","June","July","Aug","Sept","Oct","Oct","Oct","Oct","Oct",],
+                    labels: ["Jan","Feb","July","Aug","Sept","Oct","Oct","Oct","Oct","Oct","Oct","Oct",],
                     datasets: [
                         {
                             data:[
@@ -85,9 +77,9 @@ const { width: WIDTH} = Dimensions.get('window');
                                   806.000,
                                   616.100,
                                   816.000,
-                             
-                             
-                            ]
+                                  616.100,
+                                  816.000,
+                             ]
                         }
                     ]
                 }}
@@ -250,11 +242,9 @@ const styles = StyleSheet.create({
    
     },
     NavBackContainer : {
-      marginTop:50,
-      marginLeft : 30,
-      alignContent:'space-around',
-      justifyContent:'center',
-    
+      marginLeft:20,
+      marginTop:windowHeight / 20,
+      paddingBottom:20,
     },
  
     logoText: {

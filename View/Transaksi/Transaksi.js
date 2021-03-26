@@ -56,13 +56,12 @@ class Transaksi extends React.Component{
             <View style={{flexDirection:'row',paddingVertical:10}}>
               <View>
                 <Text style={styles.text}>Nominal</Text>
-                <Text style={{color:'#fff',fontSize:16}}>{item.total}</Text>
+                <Text style={{color:'#fff',fontSize:16}}>{this.currencyFormat(item.total)}</Text>
               </View>
               <View style={{marginHorizontal:30}}>
                 <Text style={styles.text}>Gram</Text>
-                <Text style={{color:'#fff',fontSize:16}}>{item.berat}</Text>
+                <Text style={{color:'#fff',fontSize:16}}>{item.berat+" gr"}</Text>
               </View>
-             
               <View>
                 <Text style={styles.text}>Tanggal</Text>
                 <Text style={{color:'#fff',fontSize:16}}>{moment(item.transaksidate).format("YYYY-MM-DD")}</Text>
@@ -76,6 +75,9 @@ class Transaksi extends React.Component{
           const { navigation } = this.props;  
          navigation.navigate('detailTransaction',{transactionID:transactionID})
     }
+    currencyFormat(num) {
+      return 'Rp.' + num.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+   }
     onLoad = async() =>{
         // const { navigation,route } = this.props;  
         // const { hargaBeliToday,token,userid } = route.params;
@@ -137,16 +139,6 @@ class Transaksi extends React.Component{
           numColumns = {numColumn}
           />
         </View>
-
-        
-      
-     
-       
-
-         
-        
-       
-        
        
         </SafeAreaView>  
     

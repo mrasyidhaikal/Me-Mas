@@ -134,10 +134,6 @@ class Profile extends React.Component{
 
           </View>
           </TouchableOpacity>
-      
-     
-       
-
          
         
           <TouchableOpacity onPress={this.onLogout}>
@@ -187,10 +183,10 @@ const styles = StyleSheet.create({
       margin : 20,
       paddingVertical:15,
       paddingLeft:15,
+      paddingRight:10,
       backgroundColor: '#252835',
       borderRadius: 10,
       flexDirection:'row',
-      
     },
    
     logoText: {

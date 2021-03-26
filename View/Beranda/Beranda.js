@@ -138,7 +138,7 @@ class login extends React.Component{
            </View>
 
            <View style={styles.header}>
-                <TouchableOpacity onPress={() => navigation.push('Profile')}>
+                <TouchableOpacity onPress={() => navigation.push("Profile")}> 
                 <Image source={require("./../../assets/profile.png")}/>
                 </TouchableOpacity>
                 <View style={styles.welcome}>
@@ -160,38 +160,40 @@ class login extends React.Component{
            </View>
 
            <View style={styles.CardHarga}>
-                  <View style={styles.contentHarga}>
-         
-              <View style={styles.contentHargaSub}>
-                 <Text style={styles.textHarga}>Harga beli</Text>
-                    <View style={styles.iconPersen}>
-                          <Icon name={this.state.iconBeli} size={11} color={this.state.warnaBeli} />
-                          <Text style={{fontSize:9,color:`${this.state.warnaBeli}`}}>{Number((this.state.beliPersen).toFixed(2))}%</Text>
+              {/* <View style={styles.contentHarga}> */}
+              <View style={{flexDirection:'row'}}>
+
+                  <View style={styles.contentHargaSub}>
+                    <View style={{flexDirection:'row'}}>
+                      <Text style={styles.textHarga}>Harga beli</Text>
+                          <View style={styles.iconPersen}>
+                                <Icon name={this.state.iconBeli} size={11} color={this.state.warnaBeli} />
+                                <Text style={{fontSize:9,color:`${this.state.warnaBeli}`}}>{Number((this.state.beliPersen).toFixed(2))}%</Text>
+                          </View>
                     </View>
-                 
-              </View>
-            
-              <View style={styles.contentHargaSub}>
-                 <Text style={styles.textHarga}>Harga Jual</Text>
-                    <View style={styles.iconPersen}>
-                        
-                          <Icon name={this.state.iconJual} size={11} color={`${this.state.warnaJual}`} />
-                          <Text style={{fontSize:9,color:`${this.state.warnaJual}`}}>{Number((this.state.jualPersen).toFixed(2))}%</Text>
+                    <View>
+                      <Text style={styles.text}>{this.currencyFormat(this.state.hargaBeliToday)}</Text>
                     </View>
+                  </View>
+
+                  <View style={styles.contentHargaSub}>
+                    <View style={{flexDirection:'row'}}>
+                    <Text style={styles.textHarga}>Harga Jual</Text>
+                        <View style={styles.iconPersen}>
+                              <Icon name={this.state.iconBeli} size={11} color={this.state.warnaJual} />
+                              <Text style={{fontSize:9,color:`${this.state.warnaJual}`}}>{Number((this.state.jualPersen).toFixed(2))}%</Text>
+                        </View>
+                    </View>
+                    <View>
+                      <Text style={styles.text}>{this.currencyFormat(this.state.hargaJualToday)}</Text>
+                    </View>
+                  </View>
+
               </View>
-                 </View>
-         
-                <View style={styles.contentHarga}>
-                   <View style={styles.contentHargaSubBawah}>
-                    <Text style={styles.text}>{this.currencyFormat(this.state.hargaBeliToday)}</Text>
-                  </View>
-                  <View style={styles.contentHargaSubBawah}>
-                    <Text style={styles.text}>{this.currencyFormat(this.state.hargaJualToday)}</Text>
-                  </View>
-                </View>
-     
+
+
                 <View style={styles.grafik}>
-                  <TouchableOpacity style={styles.containerGrafik} onPress={() => navigation.navigate('Grafik') }> 
+                  <TouchableOpacity style={styles.containerGrafik} onPress={() => navigation.navigate("Grafik") }> 
                             <Icon name={'analytics-sharp'} size={26} color={'#2EAEBF'} />
                             <Text style={{fontSize:12,color:'#2EAEBF',fontWeight:'bold'}}>Lihat Grafik</Text>
                     </TouchableOpacity>
@@ -208,7 +210,7 @@ class login extends React.Component{
               </TouchableOpacity>
              
               <TouchableOpacity style={styles.cardTransactionContentJual}>
-                    <Icon name={'trending-down-sharp'} size={54} color={'#fff'} onPress={() => navigation.navigate('JualEmas') } />
+                    <Icon name={'trending-down-sharp'} size={54} color={'#fff'} onPress={() => navigation.navigate('jualEmas',{hargaJualToday:this.state.hargaJualToday,token:this.state.token,userid:this.state.userid,saldoUang:this.state.saldoUang,userSaldo:this.state.userSaldo}) } />
                     <Text style={styles.text}>Jual</Text>
               </TouchableOpacity>
              
@@ -276,6 +278,7 @@ const styles = StyleSheet.create({
     CardHarga:{
       width : WIDTH - 50,
       marginTop:-20,
+      paddingTop:10,
       borderTopRightRadius:0,
       borderTopLeftRadius:0,
       marginLeft:20,
@@ -289,7 +292,7 @@ const styles = StyleSheet.create({
     contentHargaSub:{
         padding:30,
         paddingHorizontal:25,
-        flexDirection:'row',
+        // flexDirection:'row',
     },
     contentHargaSubBawah:{
       width:(WIDTH/2.3),

@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { Component } from 'react';
-import {SafeAreaView, StyleSheet, Text, View,Image, Dimensions,TouchableOpacity,TextInput,FlatList,ScrollView } from 'react-native';
+import {SafeAreaView, StyleSheet, Text, View,Image, Dimensions,TouchableOpacity,TextInput,FlatList,ScrollView,Alert } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
@@ -14,6 +14,8 @@ class BeliEmas extends React.Component{
     constructor() {
         super()
         this.state = {
+            berat:0,
+            // beratEmas:0,
             showPass:true,
             press:false
         }
@@ -29,9 +31,30 @@ class BeliEmas extends React.Component{
           </View>
         )
     }
+
+    checkBerat=()=>{
+      if(this.state.berat  > this.props.route.params.userSaldo ){
+        Alert.alert('Jual Emas Gagal',"Jumlah Emas Melebihi Jumlah Emas yang dimiliki !",[
+          {text: 'Oke',onPress:() => console.log("closed")}
+          
+        ])
+        // console.log(this.props.route.params.userid)
+      }
+    }
+
+    currencyFormat(num) {
+      return 'Rp.' + num.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+   }
+
+    
+    componentDidMount(){
+      
+    }
+
     render(){
       const { navigation } = this.props;
-    return(
+    
+      return(
         
         <View style={styles.container}>
            
@@ -50,7 +73,7 @@ class BeliEmas extends React.Component{
                 <View style={{flexDirection:'row',justifyContent:'space-around',}}>
                   <Text style={styles.text}>Harga Jual</Text>
                 <Icon name={'ios-chevron-forward-sharp'} size={28} color={'#fff'}/>
-                  <Text style={styles.text}>Rp. 840.000/gr</Text>
+                  <Text style={styles.text}>{this.currencyFormat(this.props.route.params.hargaJualToday)}/gr</Text>
                 </View>
                 <View style={{flexDirection:'row',justifyContent:'flex-start',marginLeft:20}}>
                   <Text style={styles.subText}>Per/01/01/2021</Text>
@@ -59,15 +82,16 @@ class BeliEmas extends React.Component{
         
         <View style={styles.detailSaldo}>
               <Text style={styles.text}>Saldo Emas</Text>
-              <Text style={styles.logoText}>Rp. 3.380.000</Text>
-              <Text style={styles.text}>3,9 Gram</Text>
+              <Text style={styles.logoText}>{this.currencyFormat(this.props.route.params.saldoUang)}</Text>
+              <Text style={styles.text}>{this.props.route.params.userSaldo} Gram</Text>
         </View>
      
         <View style={styles.beratEmas}>
-            <Text style={styles.text}>Input berat emas</Text>
+            <Text style={styles.text}>Input berat emas (gram)</Text>
             <TextInput
                     style={styles.input}
                     keyboardType = 'number-pad'
+                    onChangeText={val => this.setState({berat:val})}
                     placeholderTextColor={'#666872'}
                     underlineColorAndroid='transparent'
                 />
@@ -76,7 +100,7 @@ class BeliEmas extends React.Component{
          
         
       <View style={{alignSelf:'center'}}>
-      <TouchableOpacity onPress={() => navigation.navigate('Login') } style={styles.btnLogin} >
+      <TouchableOpacity onPress={this.checkBerat} style={styles.btnLogin} >
                   <Text style={styles.text}>Jual Emas</Text>
       </TouchableOpacity>
       </View>
