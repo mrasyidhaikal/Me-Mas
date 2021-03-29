@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { Component } from 'react';
-import {SafeAreaView, StyleSheet, Text, View,Image, Dimensions,TouchableOpacity,TextInput,FlatList,ScrollView } from 'react-native';
+import {SafeAreaView, StyleSheet, Text, View,Image, Dimensions,TouchableOpacity,TextInput,FlatList,ScrollView,ToastAndroid } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import {Picker} from '@react-native-community/picker';
@@ -31,6 +31,10 @@ class TambahKartu extends React.Component{
             this.setState({ showPass: true, press:false })
         }
     }
+    showToast = (val) => {
+        ToastAndroid.show(val, ToastAndroid.SHORT);
+      };
+
     onSubmit = async() =>{
         const token = await CallAsyncData.getData('token')
         const userid = await CallAsyncData.getData('userid')
@@ -53,9 +57,13 @@ class TambahKartu extends React.Component{
         }),token)
         
         const {data,statusCode} = response
-        
         if (statusCode == 200) {
-            this.props.navigation.navigate('DataRekening')
+            if(response.data.success == false){
+                this.showToast(response.data.text)
+            }else{
+                this.showToast("Tambah Rekening Sukses !")
+                this.props.navigation.navigate('DataRekening')
+            }
         }
     }
   

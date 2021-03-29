@@ -77,7 +77,7 @@ class Transaksi extends React.Component{
          navigation.navigate('detailTransaction',{transactionID:transactionID})
     }
     currencyFormat(num) {
-      return 'Rp.' + num.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+      return 'Rp ' + num.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')
    }
     onLoad = async() =>{
         // const { navigation,route } = this.props;  
@@ -115,6 +115,7 @@ class Transaksi extends React.Component{
       }
       componentDidMount(){
         this.onLoad()
+        this.props.navigation.addListener('focus', this.onLoad)
        }
     render(){
      

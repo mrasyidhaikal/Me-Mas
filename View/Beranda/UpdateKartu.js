@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { Component } from 'react';
-import {SafeAreaView, StyleSheet, Text, View,Image, Dimensions,TouchableOpacity,TextInput,FlatList,ScrollView,Alert } from 'react-native';
+import {SafeAreaView, StyleSheet, Text, View,Image, Dimensions,TouchableOpacity,TextInput,FlatList,ScrollView,Alert,ToastAndroid } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import {Picker} from '@react-native-community/picker';
@@ -42,10 +42,13 @@ class UpdateKartu extends React.Component{
         const {data,statusCode} = response
       
         this.setState({bankuseridUpdate:data.bankuserid,norek:data.norekning,namarek:data.namapemilik,kodeBank:data.bankname})
- 
-        
-       
     }
+
+    showToast = (val) => {
+        ToastAndroid.show(val, ToastAndroid.SHORT);
+    };
+
+
     onDelete = async()=>{
         const { navigation } = this.props;  
         const token = await CallAsyncData.getData('token')
@@ -69,6 +72,7 @@ class UpdateKartu extends React.Component{
         const {data,statusCode} = response
         
         if (statusCode == 200) {
+            this.showToast("Delete Rekening Sukses !")
             navigation.navigate('DataRekening') 
         }else{
             Alert.alert('Gagal',data.head,[
@@ -103,6 +107,7 @@ class UpdateKartu extends React.Component{
         const {data,statusCode} = response
 
         if (statusCode == 200) {
+            this.showToast("Update Rekening Sukses !")
             navigation.navigate('DataRekening') 
         }else{
             Alert.alert('Gagal',data.head,[

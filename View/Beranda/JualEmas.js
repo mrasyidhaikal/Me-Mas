@@ -37,14 +37,15 @@ class BeliEmas extends React.Component{
       if(this.state.berat  > this.props.route.params.userSaldo ){
         Alert.alert('Jual Emas Gagal',"Jumlah Emas Melebihi Jumlah Emas yang dimiliki !",[
           {text: 'Oke',onPress:() => console.log("closed")}
-          
         ])
         // console.log(this.props.route.params.userid)
+      }else{
+
       }
     }
 
     currencyFormat(num) {
-      return 'Rp.' + num.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+      return 'Rp ' + num.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')
    }
 
     
