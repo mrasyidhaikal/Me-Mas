@@ -46,7 +46,6 @@ class DataRekening extends React.Component{
          
           this.setState({data:data})
 
-
           if(statusCode == 200){
               this.setState({ refreshing: false })
           }
@@ -89,7 +88,14 @@ class DataRekening extends React.Component{
     componentDidMount(){
       // this.setState({ refreshing: true })
       this.getDataRekening()
+      this.props.navigation.addListener('focus', this.getDataRekening)
     }
+
+    // onScreenFocus = () => {
+    //   // Screen was focused, our on focus logic goes here
+    //   this.getDataRekening()
+    // }
+  
     
     setRefreshing = () =>{
       if(this.state.refreshing == false){
@@ -122,7 +128,6 @@ class DataRekening extends React.Component{
             </View>
          
         </View>
-
         <View>
                 <FlatList
                 data={this.state.data}

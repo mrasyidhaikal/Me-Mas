@@ -37,7 +37,7 @@ class pinConfirmation extends React.Component{
     
   
       currencyFormat(num) {
-        return 'Rp.' + num.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+        return 'Rp ' + num.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')
      }
      onSubmit = async () => {
       const { navigation } = this.props;  
@@ -69,16 +69,18 @@ class pinConfirmation extends React.Component{
           "connid": "string"
       }),this.props.route.params.token
         )
-        console.log(response)
         const {data,statusCode} = response
         if (statusCode == 200) {
-          console.log("oke seppppp")
-           navigation.navigate('detail',{transactionID:data.text})
+          if (response.data.success == false){
+              Alert.alert("Transaksi Gagal!",data.head,[
+                {text: 'Oke',onPress:() => console.log("closed")}
+              ])
+          }else{
+             navigation.navigate('detail',{transactionID:data.text})
+          }
        
         }else{
-          Alert.alert('Login Gagal',data.head,[
-            {text: 'Oke',onPress:() => console.log("closed")}
-          ])
+          
         }
 
     }

@@ -73,14 +73,19 @@ class login extends React.Component{
     
     }
     getHarga = async() => {
+
+
       const today = moment(Date()).format("YYYY-MM-DD")
       const yesterDay =moment(Date()).add(-31,'days').format("YYYY-MM-DD")
+      // console.log(today)
  
-      // const today = '2005-04-02'
-      // const yesterDay = '2005-04-01'
+      // const today = '2021-03-25'
+      // const yesterDay = '2021-03-24'
+
       const url = `http://104.248.156.113:8024/api/v1/Dashboard/GetHargaEmas/${yesterDay}/${today}`
       const response = await CallAPIData.getEmas(this.state.token,url)
       const {data,statusCode} = response
+      // console.log(response)
       
       let jualPersen = ((data[0].hargajual/data[1].hargajual)-1)*100
       let beliPersen = ((data[0].hargabeli/data[1].hargabeli)-1)*100
@@ -123,7 +128,7 @@ class login extends React.Component{
     
     }
     currencyFormat(num) {
-      return 'Rp.' + num.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+      return 'Rp ' + num.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')
    }
 
    setRefreshing = () =>{
@@ -225,14 +230,14 @@ class login extends React.Component{
                     <Text style={styles.text}>Beli</Text>
               </TouchableOpacity>
              
-              <TouchableOpacity style={styles.cardTransactionContentJual}>
+              {/* <TouchableOpacity style={styles.cardTransactionContentJual}>
                     <Icon name={'trending-down-sharp'} size={54} color={'#fff'} onPress={() => navigation.navigate('jualEmas',{hargaJualToday:this.state.hargaJualToday,token:this.state.token,userid:this.state.userid,saldoUang:this.state.saldoUang,userSaldo:this.state.userSaldo}) } />
                     <Text style={styles.text}>Jual</Text>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
              
-              <TouchableOpacity style={styles.cardTransactionContentTransfer} >
-                    <Icon name={'ios-arrow-up-outline'} size={54} color={'#fff'} />
-                    <Text style={styles.text}>Transfer</Text>
+              <TouchableOpacity style={styles.cardTransactionContentTransfer} onPress={() => navigation.navigate('jualEmas',{hargaJualToday:this.state.hargaJualToday,token:this.state.token,userid:this.state.userid,saldoUang:this.state.saldoUang,userSaldo:this.state.userSaldo}) } >
+                    <Icon name={'ios-arrow-up-sharp'} size={54} color={'#fff'} />
+                    <Text style={styles.text}>Jual</Text>
               </TouchableOpacity>
            
          </View>
@@ -333,23 +338,23 @@ const styles = StyleSheet.create({
     },
     cardTransactionContentBeli:{
       padding:10,
-      paddingHorizontal:20,
+      paddingHorizontal:40,
       backgroundColor: '#2daf7e',
       borderRadius: 10,
       borderTopRightRadius:0,
       borderBottomRightRadius:0,
       alignItems:'center',
     },
-    cardTransactionContentJual:{
-      padding:10,
-      paddingHorizontal:20,
-      backgroundColor: '#2EAEBF',
-      alignItems:'center',
-    },
+    // cardTransactionContentJual:{
+    //   padding:10,
+    //   paddingHorizontal:20,
+    //   backgroundColor: '#2EAEBF',
+    //   alignItems:'center',
+    // },
     cardTransactionContentTransfer:{
       padding:10,
-      paddingHorizontal:20,
-      backgroundColor: '#FD7557',
+      paddingHorizontal:40,
+      backgroundColor: '#2EAEBF',
       borderTopLeftRadius:0,
       borderBottomLeftRadius:0,
       borderRadius: 10,

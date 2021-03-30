@@ -109,7 +109,7 @@ class Profile extends React.Component{
           <View style={styles.keamanan}>
 
             <View style={{flex:0.5,flexDirection:'row',alignItems:'center'}}>    
-                <Icon name={'ios-lock-closed-outline'} size={25} color={'#2EAEBF'} style={styles.inputIcon}/>
+                <Icon name={'ios-key-outline'} size={25} color={'#2EAEBF'} style={styles.inputIcon}/>
                 <Text style={styles.textBerat}> Password</Text>
             </View>  
 

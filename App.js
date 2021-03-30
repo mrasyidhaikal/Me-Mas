@@ -155,7 +155,7 @@ const AppTabs = () =>{
       options={{
 
         tabBarIcon: ({color}) => (
-          <Icon name="ios-home-outline" color={color} size={26} />
+          <Icon name="ios-cart-outline" color={color} size={26} />
         ),
       }}
       />
