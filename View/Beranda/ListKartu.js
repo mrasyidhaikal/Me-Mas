@@ -13,7 +13,7 @@ const { width: WIDTH} = Dimensions.get('window');
 const windowHeight = Dimensions.get('window').height;
 const numColumn = 1
 
-class DataRekening extends React.Component{
+class ListKartu extends React.Component{
   
     constructor() {
         super()
@@ -45,7 +45,7 @@ class DataRekening extends React.Component{
           const {data,statusCode} = response
          
           this.setState({data:data})
-
+          console.log(statusCode)
 
           if(statusCode == 200){
               this.setState({ refreshing: false })
@@ -55,10 +55,12 @@ class DataRekening extends React.Component{
         }
     
         _renderItem =({item,index}) =>{
-          const { navigation } = this.props;
+          const { navigation,route } = this.props;
+          const {berat,hargaJualToday,token,userid,saldoUang,userSaldo} =  route.params
+        
             return(
         
-                <TouchableOpacity style={styles.item}  onPress={() => navigation.navigate('UpdateKartu',{bankuserid:item.bankuserid,bankname:item.bankname,norek:item.norekning,namapemilik:item.namapemilik})}>
+                <TouchableOpacity style={styles.item} onPress={() => navigation.navigate('KonfirmasiJual',{bankid:item.bankuserid,berat:berat,hargaJualToday:hargaJualToday,token:token,userid:userid,saldoUang:saldoUang,userSaldo:userSaldo,norek:item.norekning,bankname:item.bankname,namapemilik:item.namapemilik})} >
             <ImageBackground source={require('./../../assets/paycard.png')} style={styles.image}>
                   <View style={styles.containerBank}>
                     {/* <View >
@@ -118,7 +120,7 @@ class DataRekening extends React.Component{
                 <Icon name={'ios-chevron-back-sharp'} size={25} color={'#fff'}/>
             </TouchableOpacity>
             <View style={{flexDirection:'row', justifyContent:'space-between'}}>
-            <Text style={styles.logoText}>Data Rekening</Text>
+            <Text style={styles.logoText}>Pilih Rekening Penerima</Text>
             </View>
          
         </View>
@@ -137,10 +139,8 @@ class DataRekening extends React.Component{
                 />
            
         </View>
-      
-    
-        
-          <TouchableOpacity onPress={() => navigation.navigate('TambahKartu')}>
+
+        <TouchableOpacity onPress={() => navigation.navigate('TambahKartu')}>
           <View style={styles.keamanan}>
 
             <View style={{flex:1,alignItems:'center',justifyContent:'center'}}>    
@@ -150,6 +150,7 @@ class DataRekening extends React.Component{
 
           </View>
           </TouchableOpacity>
+    
         
         </ScrollView>
         </SafeAreaView>  
@@ -161,7 +162,7 @@ class DataRekening extends React.Component{
 }
 
 
-export default DataRekening
+export default ListKartu
 
 
 const styles = StyleSheet.create({
