@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { Component } from 'react';
-import {SafeAreaView, StyleSheet, Text, View,Image,Button, Dimensions,TouchableOpacity,TextInput,Alert,FlatList } from 'react-native';
+import {SafeAreaView, StyleSheet, Text, View,Image,Button, Dimensions,TouchableOpacity,TextInput,Alert,FlatList,ToastAndroid } from 'react-native';
 
 import Icon from 'react-native-vector-icons/Ionicons';
 import CallAPIData from './../../Controller/CallAPI';
@@ -31,6 +31,9 @@ class detailTransaction extends React.Component{
             data:[],
             total:0,
             dataBank:{},
+
+            dateTransaksi:Date(),
+
         }
     }
     showPass = () => {      
@@ -50,17 +53,26 @@ class detailTransaction extends React.Component{
         const url = `http://104.248.156.113:8024/api/v1/Dashboard/GetTransaksi/${transactionID}`
         const response = await CallAPIData.getEmas(token,url)
         const {data,statusCode} = response
-        this.setState({data:data,total:data.total})
+        this.setState({data:data,total:data.total,transaksidate:data.transaksidate})
         this.getBank()
-     
+        var dateTransaksii = new Date(this.state.data.transaksidate)
+        this.setState({dateTransaksi:moment(dateTransaksii).add(3, "hours").format("YYYY-MM-DD HH:mm")})
+        
+
       }
       currencyFormat(num) {
-        return 'Rp.' + num.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+        return 'Rp ' + num.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')
      }
-     
-      copyToClipboard = (nova) => {
-         Clipboard.setString(nova) 
+
+     showToast = () => {
+      ToastAndroid.show("Text Copied !", ToastAndroid.SHORT);
+    };
+
+      copyToClipboard = () => {
+         Clipboard.setString(this.state.data.nova)
+         this.showToast()
     }
+      
     getBank = async() =>{
       const token = await CallAsyncData.getData('token')
     
@@ -99,7 +111,8 @@ class detailTransaction extends React.Component{
     
     componentDidMount(){
         this.checkPin()
-       }
+    }
+
     render(){
 
       const { navigation } = this.props;
@@ -168,7 +181,7 @@ class detailTransaction extends React.Component{
                 />
 
                   </View>
-                <TouchableOpacity style={styles.inputContainer} onPress={this.copyToClipboard(this.state.data.nova)}>
+                <TouchableOpacity style={styles.inputContainer} onPress={this.copyToClipboard}>
                 <TextInput
                     style={styles.input}
                     value = {this.state.data.nova}
@@ -186,7 +199,9 @@ class detailTransaction extends React.Component{
         </View>
 
         <View style={styles.detailText}>
-        <Text style={styles.deadlineText}>Selesaikan Pembayaranmu sebelum {moment(this.state.data.transaksidate).format("hh YYYY-MM-DD")}</Text>
+
+        <Text style={styles.deadlineText}>Selesaikan Pembayaranmu sebelum {this.state.dateTransaksi} WIB</Text>
+
             <View style={styles.rowText}>
               <Text style={styles.textDetail}>-</Text>
               <Text style={styles.textDetail}>Kamu memiliki Waktu 3 Jam sejak melakukan pembelian Emas ,segera lakukan Pembayaran</Text>
@@ -231,8 +246,7 @@ const styles = StyleSheet.create({
       marginLeft:20,
       marginTop:windowHeight / 20,
       paddingBottom:20,
-  
-  },
+    },
   inputIcon:{
     position: 'absolute',
    

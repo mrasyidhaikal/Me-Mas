@@ -80,17 +80,36 @@ class Profile extends React.Component{
           numColumns = {numColumn}
           />
         </View>
+        <View style={styles.NavBackContainer}>
+            <Text style={{color:'#fff',fontWeight:'bold',fontSize:20}}>Data Rekening</Text>
+            
+        </View>
+        <TouchableOpacity onPress={() => navigation.navigate('DataRekening') }>
+             <View style={styles.keamanan}>
+
+            <View style={{flex:0.5,flexDirection:'row',alignItems:'center'}}>    
+                <Icon name={'ios-card-outline'} size={25} color={'#2EAEBF'} style={styles.inputIcon}/>
+                <Text style={styles.textBerat}> Data Rekening</Text>
+            </View>  
+
+            <View style={{flex:0.5,alignItems:'flex-end'}}>
+                <Icon name={'ios-chevron-forward-sharp'} size={25} color={'#fff'}/>
+            </View>
+
+          </View>
+        </TouchableOpacity>
 
         <View style={styles.NavBackContainer}>
             <Text style={{color:'#fff',fontWeight:'bold',fontSize:20}}>Keamanan</Text>
             
         </View>
         
+        
         <TouchableOpacity onPress={() => navigation.push('ChangePassword') }>
           <View style={styles.keamanan}>
 
             <View style={{flex:0.5,flexDirection:'row',alignItems:'center'}}>    
-                <Icon name={'ios-lock-closed-outline'} size={25} color={'#2EAEBF'} style={styles.inputIcon}/>
+                <Icon name={'ios-key-outline'} size={25} color={'#2EAEBF'} style={styles.inputIcon}/>
                 <Text style={styles.textBerat}> Password</Text>
             </View>  
 
@@ -115,10 +134,6 @@ class Profile extends React.Component{
 
           </View>
           </TouchableOpacity>
-      
-     
-       
-
          
         
           <TouchableOpacity onPress={this.onLogout}>
@@ -168,10 +183,10 @@ const styles = StyleSheet.create({
       margin : 20,
       paddingVertical:15,
       paddingLeft:15,
+      paddingRight:10,
       backgroundColor: '#252835',
       borderRadius: 10,
       flexDirection:'row',
-      
     },
    
     logoText: {

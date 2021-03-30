@@ -4,6 +4,7 @@ import {SafeAreaView, StyleSheet, Text, View,Image,Button, Dimensions,TouchableO
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 
 
 import Icon from 'react-native-vector-icons/Ionicons'
@@ -23,6 +24,11 @@ import metodePembayaran from './View/Beranda/MetodePembayaran'
 import pinConfirmation from './View/Beranda/PinConfirmation'
 import detail from './View/Beranda/detail'
 import detailTransaction from './View/Transaksi/detailTransaction'
+import DataRekening from './View/Beranda/DataRekening'
+import TambahKartu from './View/Beranda/TambahKartu'
+import UpdateKartu from './View/Beranda/UpdateKartu'
+import ListKartu from './View/Beranda/ListKartu'
+import KonfirmasiJual from './View/Beranda/KonfirmasiJual'
 // import login from './View/login'
 
 const { width: WIDTH} = Dimensions.get('window');
@@ -33,6 +39,16 @@ const RegisterStack = createStackNavigator();
 const HomeStack = createStackNavigator();
 const TransaksiStack = createStackNavigator();
 const IsiHomeStack = createStackNavigator();
+
+// const IsiHomeStacks = () => {
+//   return(
+//     <IsiHomeStack.Navigator
+//     screenOptions={{ gestureEnabled: false, headerShown: false }}
+//     >
+     
+//     </IsiHomeStack.Navigator>
+//     )
+// } 
 
 const RegisterTab = () => {
   return(
@@ -64,18 +80,37 @@ const RegisterTab = () => {
   );
 }
 
-const HomeStackScreen = () =>{
+const HomeStackScreen = ({navigation,route}) =>{
+  // if(route.state && route.state.index > 0){
+  //   navigation.setOptions({tabBarVisible : false})
+  // }else{
+  //   navigation.setOptions({tabBarVisible : true})
+  // }
+
   return(
   <HomeStack.Navigator
   screenOptions={{ gestureEnabled: false, headerShown: false }}
   >
     <HomeStack.Screen name="Beranda" component={Beranda}  />
     <HomeStack.Screen name="Grafik" component={GrafikScreen}  />
-    <HomeStack.Screen name="Profile" component={Profile}  />
-    <HomeStack.Screen name="beliEmas"component={BeliEmas}/>
-    <HomeStack.Screen name="metodePembayaran"component={metodePembayaran}/>
-    <HomeStack.Screen name="pinConfirmation" component={pinConfirmation} />
-    <HomeStack.Screen name="detail" component={detailTransaction} />
+
+        <HomeStack.Screen name="Profile" component={Profile}  />
+        <HomeStack.Screen name="beliEmas"component={BeliEmas}/>
+        <HomeStack.Screen name="metodePembayaran"component={metodePembayaran}/>
+        <HomeStack.Screen name="pinConfirmation" component={pinConfirmation} />
+        <HomeStack.Screen name="detail" component={detailTransaction} />
+        <HomeStack.Screen name="jualEmas" component={JualEmas} />
+    {/* <HomeStack.Screen 
+      name="IsiHomeStack" 
+      component={IsiHomeStacks}
+    /> */}
+
+    <HomeStack.Screen name="UpdateKartu" component={UpdateKartu} />
+    <HomeStack.Screen name="DataRekening" component={DataRekening} />
+    <HomeStack.Screen name="TambahKartu" component={TambahKartu} />
+    <HomeStack.Screen name="ListKartu" component={ListKartu} />
+    <HomeStack.Screen name="KonfirmasiJual" component={KonfirmasiJual} />
+
   </HomeStack.Navigator>
   )
 }
@@ -120,7 +155,7 @@ const AppTabs = () =>{
       options={{
 
         tabBarIcon: ({color}) => (
-          <Icon name="ios-home-outline" color={color} size={26} />
+          <Icon name="ios-cart-outline" color={color} size={26} />
         ),
       }}
       />

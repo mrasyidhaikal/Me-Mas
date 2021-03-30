@@ -11,12 +11,7 @@ import Icon from 'react-native-vector-icons/Ionicons'
 const { width: WIDTH} = Dimensions.get('window');
 const windowHeight = Dimensions.get('window').height;
 
-const harga = [
-    {nama:require('./../../assets/6pYcEmoVuNG.png'),key:'mrasyid.haikal@gmail.com'},
-    {nama:require('./../../assets/5ujN7DGvKP6Qcaw3.png'),key:'M Rasyid Khaikal'},
-    {nama:require('./../../assets/8JQBzUKrep0.png'),key:'Melchem'},
-    {nama:require('./../../assets/W7kN6S2sr3bepBAy.png'),key:'511243'},
-    {nama:require('./../../assets/bfmx19udvhlSME5y.png'),key:'password'}]
+
 const numColumn = 1
 
 
