@@ -35,17 +35,17 @@ class Transaksi extends React.Component{
     }
 
     _renderItem =({item,index}) =>{
-        
-        return(
+        if(item.transaksitype == 'Jual'){
+          return(
     
             <TouchableOpacity style={styles.item} onPress={() => this.checkTransaction(item.transaksiid)}>
               <View style={styles.containerBank}>
                 <View style={styles.containerStart}>
-                  <View style={styles.cardTransactionContentBeli}>
+                  <View style={styles.cardTransactionContentJual}>
                     <Icon name={'chevron-down'} size={20} color={'#fff'} />
                   </View>
                   <View style={{padding:5}}>
-                      <Text style={styles.textBerat}>{item.transaksitype}</Text>
+                      <Text style={styles.textBerat}>Penjualan Emas</Text>
                   </View>
               </View>
               
@@ -71,6 +71,44 @@ class Transaksi extends React.Component{
             </TouchableOpacity>
         
         )
+        }else if(item.transaksitype == 'Beli'){
+          return(
+    
+            <TouchableOpacity style={styles.item} onPress={() => this.checkTransaction(item.transaksiid)}>
+              <View style={styles.containerBank}>
+                <View style={styles.containerStart}>
+                  <View style={styles.cardTransactionContentBeli}>
+                    <Icon name={'chevron-down'} size={20} color={'#fff'} />
+                  </View>
+                  <View style={{padding:5}}>
+                      <Text style={styles.textBerat}>Pembelian Emas</Text>
+                  </View>
+              </View>
+              
+              <View style={{marginRight:15}}>
+                <Icon name={'ios-chevron-forward-sharp'} size={20} color={'#666872'} />
+              </View>
+            </View>
+            <View style={{borderBottomColor:'#3A3E4F',borderBottomWidth:1,marginRight:20,marginTop:10}}></View>
+            <View style={{flexDirection:'row',paddingVertical:10}}>
+              <View>
+                <Text style={styles.text}>Nominal</Text>
+                <Text style={{color:'#fff',fontSize:16}}>{this.currencyFormat(item.total)}</Text>
+              </View>
+              <View style={{marginHorizontal:30}}>
+                <Text style={styles.text}>Gram</Text>
+                <Text style={{color:'#fff',fontSize:16}}>{item.berat+" gr"}</Text>
+              </View>
+              <View>
+                <Text style={styles.text}>Tanggal</Text>
+                <Text style={{color:'#fff',fontSize:16}}>{moment(item.transaksidate).format("YYYY-MM-DD")}</Text>
+              </View>
+            </View>
+            </TouchableOpacity>
+        
+        )
+        }
+       
     }
     checkTransaction = (transactionID) =>{
           const { navigation } = this.props;  
@@ -184,10 +222,10 @@ const styles = StyleSheet.create({
     
     },
     cardTransactionContentJual:{
-      padding:10,
-      paddingHorizontal:20,
+      padding:5,
+     
       backgroundColor: '#2EAEBF',
-      alignItems:'center',
+      borderRadius:10,
     },
     cardTransactionContentBeli:{
       padding:5,

@@ -83,7 +83,7 @@ render(){
              <View>
                <LineChart
                 data={{
-                    labels: ["Jan","Feb","July","Aug","Sept","Oct","Oct","Oct","Oct","Oct","Oct","Oct",],
+                    labels: ["Jan","Feb","July","Aug","Sept","Oct","Oct","Oct","Oct","Oct"],
                     datasets: [
                         {
                             data:[
@@ -97,8 +97,7 @@ render(){
                                   806.000,
                                   716.100,
                                   816.000,
-                                  750.100,
-                                  816.000,
+                                
                              ]
                         }
                     ]
@@ -340,4 +339,3 @@ const styles = StyleSheet.create({
   },
   
   });
-  

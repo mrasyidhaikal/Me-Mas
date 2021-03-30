@@ -74,12 +74,14 @@ class login extends React.Component{
     }
     getHarga = async() => {
 
+
       const today = moment(Date()).format("YYYY-MM-DD")
       const yesterDay =moment(Date()).add(-31,'days').format("YYYY-MM-DD")
       // console.log(today)
  
       // const today = '2021-03-25'
       // const yesterDay = '2021-03-24'
+
       const url = `http://104.248.156.113:8024/api/v1/Dashboard/GetHargaEmas/${yesterDay}/${today}`
       const response = await CallAPIData.getEmas(this.state.token,url)
       const {data,statusCode} = response
@@ -199,7 +201,7 @@ class login extends React.Component{
                     <View style={{flexDirection:'row'}}>
                     <Text style={styles.textHarga}>Harga Jual</Text>
                         <View style={styles.iconPersen}>
-                              <Icon name={this.state.iconBeli} size={11} color={this.state.warnaJual} />
+                              <Icon name={this.state.iconJual} size={11} color={this.state.warnaJual} />
                               <Text style={{fontSize:9,color:`${this.state.warnaJual}`}}>{Number((this.state.jualPersen).toFixed(2))}%</Text>
                         </View>
                     </View>
