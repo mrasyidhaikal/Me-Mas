@@ -163,7 +163,7 @@ class login extends React.Component{
                 <Image source={require("./../../assets/profile.png")}/>
                 </TouchableOpacity>
                 <View style={styles.welcome}>
-                  <Text  style={styles.text}>Selamat Datang</Text>
+                  <Text  style={styles.text}>Selamat Datang,</Text>
                   <Text style={{color:'#fff',fontWeight:'bold',fontSize:25}}>{this.state.namaUser}</Text>
                 </View>
                 <Icon name={'ios-notifications-outline'} size={24} color={'#fff'} />
@@ -216,7 +216,7 @@ class login extends React.Component{
                 <View style={styles.grafik}>
                   <TouchableOpacity style={styles.containerGrafik} onPress={() => navigation.navigate("Grafik") }> 
                             <Icon name={'analytics-sharp'} size={26} color={'#2EAEBF'} />
-                            <Text style={{fontSize:12,color:'#2EAEBF',fontWeight:'bold'}}>Lihat Grafik</Text>
+                            <Text style={{fontSize:12,color:'#2EAEBF',fontWeight:'bold'}}> Lihat Grafik</Text>
                     </TouchableOpacity>
                 </View>
 

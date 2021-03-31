@@ -38,11 +38,11 @@ class Transaksi extends React.Component{
         if(item.transaksitype == 'Jual'){
           return(
     
-            <TouchableOpacity style={styles.item} onPress={() => this.checkTransaction(item.transaksiid)}>
+            <TouchableOpacity style={styles.item} onPress={() => this.checkTransaction(item.transaksiid,item.transaksitype)}>
               <View style={styles.containerBank}>
                 <View style={styles.containerStart}>
                   <View style={styles.cardTransactionContentJual}>
-                    <Icon name={'chevron-down'} size={20} color={'#fff'} />
+                    <Icon name={'chevron-up'} size={20} color={'#fff'} />
                   </View>
                   <View style={{padding:5}}>
                       <Text style={styles.textBerat}>Penjualan Emas</Text>
@@ -65,7 +65,7 @@ class Transaksi extends React.Component{
               </View>
               <View>
                 <Text style={styles.text}>Tanggal</Text>
-                <Text style={{color:'#fff',fontSize:16}}>{moment(item.transaksidate).format("YYYY-MM-DD")}</Text>
+                <Text style={{color:'#fff',fontSize:16}}>{moment(item.transaksidate).format("DD MMM YYYY")}</Text>
               </View>
             </View>
             </TouchableOpacity>
@@ -74,7 +74,7 @@ class Transaksi extends React.Component{
         }else if(item.transaksitype == 'Beli'){
           return(
     
-            <TouchableOpacity style={styles.item} onPress={() => this.checkTransaction(item.transaksiid)}>
+            <TouchableOpacity style={styles.item} onPress={() => this.checkTransaction(item.transaksiid,item.transaksitype)}>
               <View style={styles.containerBank}>
                 <View style={styles.containerStart}>
                   <View style={styles.cardTransactionContentBeli}>
@@ -101,7 +101,7 @@ class Transaksi extends React.Component{
               </View>
               <View>
                 <Text style={styles.text}>Tanggal</Text>
-                <Text style={{color:'#fff',fontSize:16}}>{moment(item.transaksidate).format("YYYY-MM-DD")}</Text>
+                <Text style={{color:'#fff',fontSize:16}}>{moment(item.transaksidate).format("DD MMM YYYY")}</Text>
               </View>
             </View>
             </TouchableOpacity>
@@ -110,9 +110,13 @@ class Transaksi extends React.Component{
         }
        
     }
-    checkTransaction = (transactionID) =>{
+    checkTransaction = (transactionID,transaksitype) =>{
           const { navigation } = this.props;  
-         navigation.navigate('detailTransaction',{transactionID:transactionID})
+          if(transaksitype == 'Beli'){
+              navigation.navigate('detailTransaction',{transactionID:transactionID})
+          }else if(transaksitype == 'Jual'){
+               navigation.navigate('detailJualTransaction',{transactionID:transactionID})
+          }
     }
     currencyFormat(num) {
       return 'Rp ' + num.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')

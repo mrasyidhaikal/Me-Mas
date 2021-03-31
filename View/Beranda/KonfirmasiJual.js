@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { Component } from 'react';
-import {SafeAreaView, StyleSheet, Text, View,Image, Dimensions,TouchableOpacity,TextInput,Alert } from 'react-native';
+import {SafeAreaView, StyleSheet, Text, View,Image, Dimensions,TouchableOpacity,TextInput,Alert,ToastAndroid } from 'react-native';
 
 import SmoothPinCodeInput from 'react-native-smooth-pincode-input';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -39,6 +39,9 @@ class KonfirmasiJual extends React.Component{
       currencyFormat(num) {
         return 'Rp.' + num.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')
      }
+     showToast = (val) => {
+      ToastAndroid.show(val, ToastAndroid.SHORT);
+      };
      onSubmit = async () => {
       const { navigation } = this.props;  
       const namaUser = await CallAsyncData.getData('name')
@@ -74,15 +77,15 @@ class KonfirmasiJual extends React.Component{
         console.log(response)
         const {data,statusCode} = response
         if (statusCode == 200) {
-          console.log("oke seppppp")
-           navigation.navigate('Transaksi')
-       
-        }else{
-          Alert.alert('Login Gagal',data.head,[
-            {text: 'Oke',onPress:() => console.log("closed")}
-          ])
+          if (response.data.success == false){
+              Alert.alert("Transaksi Gagal!",data.head,[
+                {text: 'Oke',onPress:() => console.log("closed")}
+              ])
+          }else{
+              this.showToast("Transaksi Penjualan Sukses !")
+              navigation.navigate('Transaksi')
+          }
         }
-
     }
 
     render(){

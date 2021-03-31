@@ -31,7 +31,7 @@ const windowHeight = Dimensions.get('window').height;
   
     
 render(){
-      
+  const { navigation,route } = this.props;  
  
       
       

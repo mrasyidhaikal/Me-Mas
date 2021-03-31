@@ -24,6 +24,7 @@ import metodePembayaran from './View/Beranda/MetodePembayaran'
 import pinConfirmation from './View/Beranda/PinConfirmation'
 import detail from './View/Beranda/detail'
 import detailTransaction from './View/Transaksi/detailTransaction'
+import detailJualTransaction from './View/Transaksi/detailJualTransaction'
 import DataRekening from './View/Beranda/DataRekening'
 import TambahKartu from './View/Beranda/TambahKartu'
 import UpdateKartu from './View/Beranda/UpdateKartu'
@@ -99,6 +100,7 @@ const HomeStackScreen = ({navigation,route}) =>{
         <HomeStack.Screen name="metodePembayaran"component={metodePembayaran}/>
         <HomeStack.Screen name="pinConfirmation" component={pinConfirmation} />
         <HomeStack.Screen name="detail" component={detailTransaction} />
+        <HomeStack.Screen name="detailJual" component={detailJualTransaction} />
         <HomeStack.Screen name="jualEmas" component={JualEmas} />
     {/* <HomeStack.Screen 
       name="IsiHomeStack" 
@@ -122,6 +124,7 @@ const TransaksiStackScreen = () =>{
   >
     <TransaksiStack.Screen name="Transaksi" component={Transaksi}  />
     <TransaksiStack.Screen name="detailTransaction" component={detailTransaction} />
+    <TransaksiStack.Screen name="detailJualTransaction" component={detailJualTransaction} />
   </TransaksiStack.Navigator>
   )
 }
