@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { Component } from 'react';
-import {SafeAreaView, StyleSheet, Text, View,Image, Dimensions,TouchableOpacity,TextInput,Alert } from 'react-native';
+import {SafeAreaView, StyleSheet, Text, View,Image, Dimensions,TouchableOpacity,TextInput,Alert,ToastAndroid } from 'react-native';
 
 import SmoothPinCodeInput from 'react-native-smooth-pincode-input';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -8,7 +8,7 @@ import CallAPIData from './../../Controller/CallAPI';
 import CallAsyncData from './../../Controller/CallAsyncData';
 const { width: WIDTH} = Dimensions.get('window');
 const windowHeight = Dimensions.get('window').height;
-class pinConfirmation extends React.Component{
+class KonfirmasiJual extends React.Component{
   
     constructor() {
         super()
@@ -37,38 +37,44 @@ class pinConfirmation extends React.Component{
     
   
       currencyFormat(num) {
-        return 'Rp ' + num.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')
+        return 'Rp.' + num.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')
      }
+     showToast = (val) => {
+      ToastAndroid.show(val, ToastAndroid.SHORT);
+      };
      onSubmit = async () => {
       const { navigation } = this.props;  
       const namaUser = await CallAsyncData.getData('name')
       const emailUser = await CallAsyncData.getData('email')
      
       const phone = await CallAsyncData.getData('phone')
-      const response = await CallAPIData.postAPIToken('http://104.248.156.113:8024/api/v1/Dashboard/BeliEmas',
+      const total = this.props.route.params.berat * this.props.route.params.hargaJualToday
+  
+      const response = await CallAPIData.postAPIToken('http://104.248.156.113:8024/api/v1/Dashboard/JualEmas',
         JSON.stringify(
         {
-          "userid": this.props.route.params.userid,
-          "berat": this.props.route.params.berat,
-          "harga": this.props.route.params.total,
-          "total": this.props.route.params.total,
-          "nopin": this.state.pin,
-          "remarks": "string",
-          "nama": namaUser,
-          "email": emailUser,
-          "phone": phone,
-          "bankid": this.props.route.params.bankid,
-          "op": "string",
-          "pc": "string",
-          "xuserid": "string",
-          "xsourceid": "string",
-          "xremarks": "string",
-          "xsourcecode": "string",
-          "xempname": "string",
-          "ipaddress": "string",
-          "connid": "string"
+            "userid": this.props.route.params.userid,
+            "berat": this.props.route.params.berat,
+            "harga": this.props.route.params.hargaJualToday,
+            "total": total,
+            "nopin": this.state.pin,
+            "remarks": "string",
+            "nama": namaUser,
+            "email": emailUser,
+            "phone": phone,
+            "bankuserid": this.props.route.params.bankid,
+            "op": "string",
+            "pc": "string",
+            "xuserid": "string",
+            "xsourceid": "string",
+            "xremarks": "string",
+            "xsourcecode": "string",
+            "xempname": "string",
+            "ipaddress": "string",
+            "connid": "string"
       }),this.props.route.params.token
         )
+        console.log(response)
         const {data,statusCode} = response
         if (statusCode == 200) {
           if (response.data.success == false){
@@ -76,20 +82,18 @@ class pinConfirmation extends React.Component{
                 {text: 'Oke',onPress:() => console.log("closed")}
               ])
           }else{
-             navigation.navigate('detail',{transactionID:data.text})
+              this.showToast("Transaksi Penjualan Sukses !")
+              navigation.navigate('Transaksi')
           }
-       
-        }else{
-          
         }
-
     }
 
     render(){
 
       const { navigation } = this.props;
       const { PINCode } = this.state;
-  
+      let total = this.props.route.params.berat * this.props.route.params.hargaJualToday
+      let diterima = total - 4500
     return(
         
         <View style={styles.container}>
@@ -99,48 +103,49 @@ class pinConfirmation extends React.Component{
                 <Icon name={'ios-chevron-back-sharp'} size={25} color={'#fff'}/>
             </TouchableOpacity>
             <View style={{flexDirection:'row', justifyContent:'space-between'}}>
-            <Text style={styles.logoText}>Konfirmasi Pembelian</Text>
+            <Text style={styles.logoText}>Konfirmasi Penjualan</Text>
            
             </View>
          
         </View>
+
+        <View style={styles.detailText}>
+            <Text style={styles.textDetail}>Rincian Penjualan</Text>
+        </View>
         <View style={styles.detailHarga}>
                   <View style={styles.row}>
                   <Text style={styles.text}>Berat Emas</Text>
-                  <Text style={styles.text}>{Number((this.props.route.params.berat).toFixed(4))}/gr</Text>
+                  <Text style={styles.text}>{this.props.route.params.berat} /gr</Text>
+                </View>
+                <View style={styles.row}>
+                  <Text style={styles.text}>Nilai Rupiah</Text>
+                  <Text style={styles.text}>{this.currencyFormat(total)}</Text>
+                </View>
+                <View style={styles.row}>
+                  <Text style={styles.text}>Biaya Admin</Text>
+                  <Text style={styles.text}>{this.currencyFormat(4500)}</Text>
+                </View>
+                <View style={styles.row}>
+                  <Text style={styles.text}>Uang yang Diterima</Text>
+                  <Text style={styles.text}>{this.currencyFormat(diterima)}</Text>
                 </View>
         </View>
-
-        <View style={styles.detailHarga}>
-                  <View style={styles.row}>
-                    <Text style={styles.text}>Total Pembelian</Text>
-                    <Text style={styles.text}>{this.currencyFormat(this.props.route.params.total)}</Text>
-                  </View>
-                  <View style={styles.row}>
-                    <View style={styles.row}>
-                    <Text style={styles.text}>Biaya VA</Text>
-                    </View>
-                    <View>
-                    <Text style={styles.text}>{this.currencyFormat(4500)}</Text>
-                    </View>
-                  </View>
-                  <View style={styles.row}>
-                    <Text style={styles.text}>Total Pembayaran</Text>
-                    <Text style={styles.text}>{this.currencyFormat(this.props.route.params.total + 4500)}</Text>
-                  </View>
+        <View style={styles.detailText}>
+            <Text style={styles.textDetail}>Rekening Penerima</Text>
         </View>
         <View style={styles.detailHarga}>
                   <View style={styles.row}>
-                  <Image style={styles.imageBank}   
-                    source={{
-                    uri: this.props.route.params.urlicon,
-                    }}/> 
-                 
-                 <View style={{marginTop:8}}> 
-                  <Text style={styles.text}>{this.props.route.params.kategori}</Text>
+                  <Text style={styles.text}>Rekening</Text>
+                  <Text style={styles.text}>{this.props.route.params.bankname}</Text>
                 </View>
+                <View style={styles.row}>
+                  <Text style={styles.text}>No. Rekening</Text>
+                  <Text style={styles.text}>{this.props.route.params.norek}</Text>
                 </View>
-
+                <View style={styles.row}>
+                  <Text style={styles.text}>Atas Nama</Text>
+                  <Text style={styles.text}>{this.props.route.params.namapemilik}</Text>
+                </View>
                 <View style={styles.row}>
                   <View style={{marginTop:10}}>
                     <Text style={styles.text}>Konfirmasi PIN</Text>
@@ -163,20 +168,11 @@ class pinConfirmation extends React.Component{
                 </TouchableOpacity>
                 </View>
                   </View>
-               
         </View>
 
-        <View style={styles.detailText}>
-            <View style={styles.rowText}>
-              <Text style={styles.textDetail}>1.</Text>
-              <Text style={styles.textDetail}>Pastikan data sudah benar,lalu selesaikan pembayaran</Text>
-            </View>
-            <View style={styles.rowText}>
-            <Text style={styles.textDetail}>2.</Text>
-            <Text style={styles.textDetail}>Nomor Virtual account akan Muncul di halaman selanjutnya</Text>
-            </View>
-             
-        </View>
+    
+
+       
           
         
       
@@ -198,7 +194,7 @@ class pinConfirmation extends React.Component{
 }
 
 
-export default pinConfirmation
+export default KonfirmasiJual
 
 
 const styles = StyleSheet.create({
@@ -211,7 +207,7 @@ const styles = StyleSheet.create({
     NavBackContainer : {
       marginLeft:20,
       marginTop:windowHeight / 20,
-      paddingBottom:20,
+      paddingBottom:5,
   
   },
   inputIcon:{
@@ -265,8 +261,8 @@ const styles = StyleSheet.create({
   detailText:{
     width : WIDTH - 55,
     marginHorizontal:25,
-    marginVertical:10,
-    paddingVertical:10,
+    marginVertical:5,
+   
     borderRadius: 10,
   },
   btnEye:{

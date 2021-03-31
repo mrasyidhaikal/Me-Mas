@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {SafeAreaView, StyleSheet, Text, View,Image,Button, Dimensions,TouchableOpacity,TextInput, StatusBar,ScrollView } from 'react-native';
+import {SafeAreaView, StyleSheet, Text, View,Image,Button, Dimensions,TouchableOpacity,TextInput, StatusBar,ScrollView, RefreshControl } from 'react-native';
 import Logout from './../../Controller/Logout';
 import CallAsyncData from './../../Controller/CallAsyncData';
 import CallAPIData from './../../Controller/CallAPI';
@@ -34,6 +34,7 @@ class login extends React.Component{
             warnaJual : "#fff",
             userSaldo :0,
             saldoUang:0,
+            refreshing: false,
            
         }
     }
@@ -73,14 +74,18 @@ class login extends React.Component{
     }
     getHarga = async() => {
 
-      //const today = moment(Date()).format("YYYY-MM-DD")
-     // const yesterDay =moment(new Date(new Date().setDate(new Date().getDate()-1))).format("YYYY-MM-DD");
+
+      const today = moment(Date()).format("YYYY-MM-DD")
+      const yesterDay =moment(Date()).add(-31,'days').format("YYYY-MM-DD")
+      // console.log(today)
  
-      const today = '2005-04-02'
-      const yesterDay = '2005-04-01'
+      // const today = '2021-03-25'
+      // const yesterDay = '2021-03-24'
+
       const url = `http://104.248.156.113:8024/api/v1/Dashboard/GetHargaEmas/${yesterDay}/${today}`
       const response = await CallAPIData.getEmas(this.state.token,url)
       const {data,statusCode} = response
+      // console.log(response)
       
       let jualPersen = ((data[0].hargajual/data[1].hargajual)-1)*100
       let beliPersen = ((data[0].hargabeli/data[1].hargabeli)-1)*100
@@ -92,6 +97,11 @@ class login extends React.Component{
       this.checkDownOrUpJual()
       this.getSaldo()
      
+      if(statusCode == 200 ){
+        this.setState({ refreshing: false })
+      }
+
+
     }
     checkDownOrUpBeli(){
       if (this.state.beliPersen < 0) {
@@ -118,10 +128,15 @@ class login extends React.Component{
     
     }
     currencyFormat(num) {
-      return 'Rp.' + num.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+      return 'Rp ' + num.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')
    }
 
-    
+   setRefreshing = () =>{
+     if(this.state.refreshing == false){
+        this.setState({ refreshing: true })
+        this.getHarga()
+      }
+   }
     render(){
     
       const { navigation } = this.props;
@@ -132,6 +147,12 @@ class login extends React.Component{
         <ScrollView
                 style={styles.contentContainer}
                 showsVerticalScrollIndicator={true}
+                refreshControl={
+                  <RefreshControl
+                    refreshing={this.state.refreshing}
+                    onRefresh={this.setRefreshing}
+                  />
+                }
               >
            <View style={styles.logoContainer}>
             <Image source={require("./../../assets/logoHome.png")}/>
@@ -142,7 +163,7 @@ class login extends React.Component{
                 <Image source={require("./../../assets/profile.png")}/>
                 </TouchableOpacity>
                 <View style={styles.welcome}>
-                  <Text  style={styles.text}>Selamat Datang</Text>
+                  <Text  style={styles.text}>Selamat Datang,</Text>
                   <Text style={{color:'#fff',fontWeight:'bold',fontSize:25}}>{this.state.namaUser}</Text>
                 </View>
                 <Icon name={'ios-notifications-outline'} size={24} color={'#fff'} />
@@ -180,7 +201,7 @@ class login extends React.Component{
                     <View style={{flexDirection:'row'}}>
                     <Text style={styles.textHarga}>Harga Jual</Text>
                         <View style={styles.iconPersen}>
-                              <Icon name={this.state.iconBeli} size={11} color={this.state.warnaJual} />
+                              <Icon name={this.state.iconJual} size={11} color={this.state.warnaJual} />
                               <Text style={{fontSize:9,color:`${this.state.warnaJual}`}}>{Number((this.state.jualPersen).toFixed(2))}%</Text>
                         </View>
                     </View>
@@ -195,7 +216,7 @@ class login extends React.Component{
                 <View style={styles.grafik}>
                   <TouchableOpacity style={styles.containerGrafik} onPress={() => navigation.navigate("Grafik") }> 
                             <Icon name={'analytics-sharp'} size={26} color={'#2EAEBF'} />
-                            <Text style={{fontSize:12,color:'#2EAEBF',fontWeight:'bold'}}>Lihat Grafik</Text>
+                            <Text style={{fontSize:12,color:'#2EAEBF',fontWeight:'bold'}}> Lihat Grafik</Text>
                     </TouchableOpacity>
                 </View>
 
@@ -209,14 +230,14 @@ class login extends React.Component{
                     <Text style={styles.text}>Beli</Text>
               </TouchableOpacity>
              
-              <TouchableOpacity style={styles.cardTransactionContentJual}>
+              {/* <TouchableOpacity style={styles.cardTransactionContentJual}>
                     <Icon name={'trending-down-sharp'} size={54} color={'#fff'} onPress={() => navigation.navigate('jualEmas',{hargaJualToday:this.state.hargaJualToday,token:this.state.token,userid:this.state.userid,saldoUang:this.state.saldoUang,userSaldo:this.state.userSaldo}) } />
                     <Text style={styles.text}>Jual</Text>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
              
-              <TouchableOpacity style={styles.cardTransactionContentTransfer} >
-                    <Icon name={'ios-arrow-up-outline'} size={54} color={'#fff'} />
-                    <Text style={styles.text}>Transfer</Text>
+              <TouchableOpacity style={styles.cardTransactionContentTransfer} onPress={() => navigation.navigate('jualEmas',{hargaJualToday:this.state.hargaJualToday,token:this.state.token,userid:this.state.userid,saldoUang:this.state.saldoUang,userSaldo:this.state.userSaldo}) } >
+                    <Icon name={'ios-arrow-up-sharp'} size={54} color={'#fff'} />
+                    <Text style={styles.text}>Jual</Text>
               </TouchableOpacity>
            
          </View>
@@ -317,23 +338,23 @@ const styles = StyleSheet.create({
     },
     cardTransactionContentBeli:{
       padding:10,
-      paddingHorizontal:20,
+      paddingHorizontal:40,
       backgroundColor: '#2daf7e',
       borderRadius: 10,
       borderTopRightRadius:0,
       borderBottomRightRadius:0,
       alignItems:'center',
     },
-    cardTransactionContentJual:{
-      padding:10,
-      paddingHorizontal:20,
-      backgroundColor: '#2EAEBF',
-      alignItems:'center',
-    },
+    // cardTransactionContentJual:{
+    //   padding:10,
+    //   paddingHorizontal:20,
+    //   backgroundColor: '#2EAEBF',
+    //   alignItems:'center',
+    // },
     cardTransactionContentTransfer:{
       padding:10,
-      paddingHorizontal:20,
-      backgroundColor: '#FD7557',
+      paddingHorizontal:40,
+      backgroundColor: '#2EAEBF',
       borderTopLeftRadius:0,
       borderBottomLeftRadius:0,
       borderRadius: 10,

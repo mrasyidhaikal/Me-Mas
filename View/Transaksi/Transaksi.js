@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { Component } from 'react';
-import {SafeAreaView, StyleSheet, Text, View,Image, Dimensions,TouchableOpacity,TextInput,FlatList,ScrollView } from 'react-native';
+import {SafeAreaView, StyleSheet, Text, View,Image, Dimensions,TouchableOpacity,TextInput,FlatList,ScrollView,refreshControl, RefreshControl } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -30,21 +30,22 @@ class Transaksi extends React.Component{
             data : [],
             selectedId:'',
             harga : 0,
+            refreshing: false,
         }
     }
 
     _renderItem =({item,index}) =>{
-        
-        return(
+        if(item.transaksitype == 'Jual'){
+          return(
     
-            <TouchableOpacity style={styles.item} onPress={() => this.checkTransaction(item.transaksiid)}>
+            <TouchableOpacity style={styles.item} onPress={() => this.checkTransaction(item.transaksiid,item.transaksitype)}>
               <View style={styles.containerBank}>
                 <View style={styles.containerStart}>
-                  <View style={styles.cardTransactionContentBeli}>
-                    <Icon name={'chevron-down'} size={20} color={'#fff'} />
+                  <View style={styles.cardTransactionContentJual}>
+                    <Icon name={'chevron-up'} size={20} color={'#fff'} />
                   </View>
                   <View style={{padding:5}}>
-                      <Text style={styles.textBerat}>{item.transaksitype}</Text>
+                      <Text style={styles.textBerat}>Penjualan Emas</Text>
                   </View>
               </View>
               
@@ -64,19 +65,61 @@ class Transaksi extends React.Component{
               </View>
               <View>
                 <Text style={styles.text}>Tanggal</Text>
-                <Text style={{color:'#fff',fontSize:16}}>{moment(item.transaksidate).format("YYYY-MM-DD")}</Text>
+                <Text style={{color:'#fff',fontSize:16}}>{moment(item.transaksidate).format("DD MMM YYYY")}</Text>
               </View>
             </View>
             </TouchableOpacity>
         
         )
+        }else if(item.transaksitype == 'Beli'){
+          return(
+    
+            <TouchableOpacity style={styles.item} onPress={() => this.checkTransaction(item.transaksiid,item.transaksitype)}>
+              <View style={styles.containerBank}>
+                <View style={styles.containerStart}>
+                  <View style={styles.cardTransactionContentBeli}>
+                    <Icon name={'chevron-down'} size={20} color={'#fff'} />
+                  </View>
+                  <View style={{padding:5}}>
+                      <Text style={styles.textBerat}>Pembelian Emas</Text>
+                  </View>
+              </View>
+              
+              <View style={{marginRight:15}}>
+                <Icon name={'ios-chevron-forward-sharp'} size={20} color={'#666872'} />
+              </View>
+            </View>
+            <View style={{borderBottomColor:'#3A3E4F',borderBottomWidth:1,marginRight:20,marginTop:10}}></View>
+            <View style={{flexDirection:'row',paddingVertical:10}}>
+              <View>
+                <Text style={styles.text}>Nominal</Text>
+                <Text style={{color:'#fff',fontSize:16}}>{this.currencyFormat(item.total)}</Text>
+              </View>
+              <View style={{marginHorizontal:30}}>
+                <Text style={styles.text}>Gram</Text>
+                <Text style={{color:'#fff',fontSize:16}}>{item.berat+" gr"}</Text>
+              </View>
+              <View>
+                <Text style={styles.text}>Tanggal</Text>
+                <Text style={{color:'#fff',fontSize:16}}>{moment(item.transaksidate).format("DD MMM YYYY")}</Text>
+              </View>
+            </View>
+            </TouchableOpacity>
+        
+        )
+        }
+       
     }
-    checkTransaction = (transactionID) =>{
+    checkTransaction = (transactionID,transaksitype) =>{
           const { navigation } = this.props;  
-         navigation.navigate('detailTransaction',{transactionID:transactionID})
+          if(transaksitype == 'Beli'){
+              navigation.navigate('detailTransaction',{transactionID:transactionID})
+          }else if(transaksitype == 'Jual'){
+               navigation.navigate('detailJualTransaction',{transactionID:transactionID})
+          }
     }
     currencyFormat(num) {
-      return 'Rp.' + num.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+      return 'Rp ' + num.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')
    }
     onLoad = async() =>{
         // const { navigation,route } = this.props;  
@@ -90,7 +133,17 @@ class Transaksi extends React.Component{
         const {data,statusCode} = response
         this.setState({data:data})
       
+        if(statusCode == 200){
+         this.setState({ refreshing: false })
+        }
     
+    }
+
+    setRefreshing = () =>{
+      if(this.state.refreshing == false){
+         this.setState({ refreshing: true })
+         this.onLoad()
+       }
     }
 
     getBank = () => {
@@ -104,6 +157,7 @@ class Transaksi extends React.Component{
       }
       componentDidMount(){
         this.onLoad()
+        this.props.navigation.addListener('focus', this.onLoad)
        }
     render(){
      
@@ -114,32 +168,39 @@ class Transaksi extends React.Component{
         <View style={styles.container}>
            
         <SafeAreaView>
-     
-        <View style={styles.NavBackContainer}>
-           
-            <View>
-            <Text style={styles.logoText}>Transaksi</Text>
-           
-            </View>
-         
-        </View>
+          <ScrollView
+            refreshControl={
+              <RefreshControl
+                refreshing={this.state.refreshing}
+                onRefresh={this.setRefreshing}
+              />
+            }
+          >
+              <View style={styles.NavBackContainer}>
+                
+                  <View>
+                  <Text style={styles.logoText}>Transaksi</Text>
+                
+                  </View>
+              
+              </View>
 
-        
-        <View style={styles.NavBackContainer}>
-      
-        </View>
-        <View>
-        <FlatList
-          data={this.state.data}
-          renderItem = {this._renderItem}
-          keyExtractor={(item, index)=> index.toString()}
-          extraData={
-            this.state.selectedId     // for single item
-          }
-          numColumns = {numColumn}
-          />
-        </View>
-       
+              
+              <View style={styles.NavBackContainer}>
+            
+              </View>
+              <View>
+              <FlatList
+                data={this.state.data}
+                renderItem = {this._renderItem}
+                keyExtractor={(item, index)=> index.toString()}
+                extraData={
+                  this.state.selectedId     // for single item
+                }
+                numColumns = {numColumn}
+                />
+              </View>
+          </ScrollView>
         </SafeAreaView>  
     
       </View>
@@ -165,10 +226,10 @@ const styles = StyleSheet.create({
     
     },
     cardTransactionContentJual:{
-      padding:10,
-      paddingHorizontal:20,
+      padding:5,
+     
       backgroundColor: '#2EAEBF',
-      alignItems:'center',
+      borderRadius:10,
     },
     cardTransactionContentBeli:{
       padding:5,

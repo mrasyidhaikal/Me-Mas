@@ -1,12 +1,13 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { Component } from 'react';
-import {SafeAreaView, StyleSheet, Text, View,Image, Dimensions,TouchableOpacity,TextInput,FlatList,ScrollView,Alert } from 'react-native';
+import {SafeAreaView, StyleSheet, Text, View,Image, Dimensions,TouchableOpacity,TextInput,ScrollView,Alert } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import Icon from 'react-native-vector-icons/Ionicons'
 
 const { width: WIDTH} = Dimensions.get('window');
+const windowHeight = Dimensions.get('window').height;
 const harga = [{key:'100rb'},{key:'250rb'},{key:'500rb'},{key:'750rb'},{key:'1jt'},{key:'Lainnya'}]
 const numColumn = 3
 class BeliEmas extends React.Component{
@@ -33,17 +34,25 @@ class BeliEmas extends React.Component{
     }
 
     checkBerat=()=>{
+      const { navigation,route } = this.props;
       if(this.state.berat  > this.props.route.params.userSaldo ){
         Alert.alert('Jual Emas Gagal',"Jumlah Emas Melebihi Jumlah Emas yang dimiliki !",[
           {text: 'Oke',onPress:() => console.log("closed")}
-          
         ])
         // console.log(this.props.route.params.userid)
+      }else{
+
+
+        const {hargaJualToday,token,userid,saldoUang,userSaldo} =  route.params
+   
+        
+        navigation.navigate('ListKartu',{berat:this.state.berat,hargaJualToday:hargaJualToday,token:token,userid:userid,saldoUang:saldoUang,userSaldo:userSaldo})
+
       }
     }
 
     currencyFormat(num) {
-      return 'Rp.' + num.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+      return 'Rp ' + num.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')
    }
 
     
@@ -129,6 +138,7 @@ const styles = StyleSheet.create({
       marginLeft : 30,
       alignContent:'space-around',
       justifyContent:'center',
+      marginTop:windowHeight / 20,
     
     },
     detailHarga:{

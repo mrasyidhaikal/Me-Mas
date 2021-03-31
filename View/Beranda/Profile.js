@@ -9,12 +9,12 @@ import Icon from 'react-native-vector-icons/Ionicons'
 const { width: WIDTH} = Dimensions.get('window');
 const windowHeight = Dimensions.get('window').height;
 console.log(windowHeight);
-const harga = [
+const profile = [
     {nama:'Email',key:'mrasyid.haikal@gmail.com'},
     {nama:'Nama Lengkap',key:'M Rasyid Khaikal'},
     {nama:'Alamat',key:'Melchem'},
     {nama:'Nomor KTP',key:'511243'},
-    {nama:'Tempat Lahir',key:'password'}]
+    {nama:'Tempat Lahir',key:'Tempat Lahir'}]
 const numColumn = 1
 
 
@@ -27,6 +27,22 @@ class Profile extends React.Component{
             press:false
         }
     }
+
+    getProfile = async() =>{
+      const { navigation,route } = this.props;  
+      const { transactionID } = route.params;
+
+        const token = await CallAsyncData.getData('token')
+        const url = `http://104.248.156.113:8024/api/v1/Dashboard/GetTransaksi/${transactionID}`
+        const response = await CallAPIData.getEmas(token,url)
+        const {data,statusCode} = response
+        this.setState({data:data,total:data.total,transaksidate:data.transaksidate,hargaJual:data.harga})
+        this.getBank()
+        var dateTransaksii = new Date(this.state.data.transaksidate)
+        this.setState({dateTransaksi:moment(dateTransaksii).add(3, "hours").format("YYYY-MM-DD HH:mm")})
+        
+
+      }
 
     _renderItem =({item,index}) =>{
       
@@ -44,7 +60,7 @@ class Profile extends React.Component{
       const { navigation } = this.props;
       try{
         await AsyncStorage.clear()
-        navigation.navigate('Login')
+          navigation.navigate('Login')
       }catch(err){
         console.log(err)
       }
@@ -74,7 +90,7 @@ class Profile extends React.Component{
         </View>
         <View>
         <FlatList
-          data={harga}
+          data={profile}
           renderItem = {this._renderItem}
           keyExtractor={(item, index)=> index.toString()}
           numColumns = {numColumn}
@@ -89,7 +105,7 @@ class Profile extends React.Component{
 
             <View style={{flex:0.5,flexDirection:'row',alignItems:'center'}}>    
                 <Icon name={'ios-card-outline'} size={25} color={'#2EAEBF'} style={styles.inputIcon}/>
-                <Text style={styles.textBerat}> Data Rekning</Text>
+                <Text style={styles.textBerat}> Data Rekening</Text>
             </View>  
 
             <View style={{flex:0.5,alignItems:'flex-end'}}>
@@ -109,7 +125,7 @@ class Profile extends React.Component{
           <View style={styles.keamanan}>
 
             <View style={{flex:0.5,flexDirection:'row',alignItems:'center'}}>    
-                <Icon name={'ios-lock-closed-outline'} size={25} color={'#2EAEBF'} style={styles.inputIcon}/>
+                <Icon name={'ios-key-outline'} size={25} color={'#2EAEBF'} style={styles.inputIcon}/>
                 <Text style={styles.textBerat}> Password</Text>
             </View>  
 

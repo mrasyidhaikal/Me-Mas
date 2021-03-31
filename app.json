@@ -8,7 +8,7 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#1f1d2a"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -20,13 +20,16 @@
       "supportsTablet": true
     },
     "android": {
+      "package": "com.kuadran.megold",
+      "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#FFFFFF"
+        "backgroundColor": "#FFFFFF" 
       }
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "description": "Me Gold"
   }
 }

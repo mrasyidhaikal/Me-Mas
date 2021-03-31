@@ -1,5 +1,5 @@
 import React, { Component,useState } from 'react';
-import {SafeAreaView, StyleSheet, Text, View,Image,Button, Dimensions,TouchableOpacity,TextInput, StatusBar,ScrollView,FlatList } from 'react-native';
+import {SafeAreaView, StyleSheet, Text, View,Image,Button, Dimensions,TouchableOpacity,TextInput, StatusBar,ScrollView,FlatList,RefreshControl } from 'react-native';
 import { LineChart } from "react-native-chart-kit";
 import { Rect, Text as TextSVG, Svg } from "react-native-svg";
 import Icon from 'react-native-vector-icons/Ionicons'
@@ -8,11 +8,30 @@ const { width: WIDTH} = Dimensions.get('window');
 const windowHeight = Dimensions.get('window').height;
   export const dataChart = ["May","June","July","Aug","Sept","Oct","Oct","Oct","Oct","Oct",]
   export const {width: SIZE} = Dimensions.get('window')
-  const Charts = ({ navigation }) =>{
+  
+  // const Charts = ({ navigation }) =>{
+    // let [this.state, setthis.state] = useState({ x: 0, y: 0, visible: false, value: 0,waktu : ""})
+
+
+    class Charts extends React.Component{
+  
+      constructor() {
+       
+          super()
+    
+          this.state = {
+            x:0,
+            y:0,
+            visible:false,
+            value:0,
+            waktu:"",
+          }
+      }
+  
   
     
-    let [tooltipPos, setTooltipPos] = useState({ x: 0, y: 0, visible: false, value: 0,waktu : ""})
-   
+render(){
+  const { navigation,route } = this.props;  
  
       
       
@@ -20,6 +39,7 @@ const windowHeight = Dimensions.get('window').height;
         
         <View style={styles.container}>
         <SafeAreaView>
+          <ScrollView>
             <View style={styles.NavBackContainer}>
             <TouchableOpacity onPress={() => navigation.goBack()}>
                 <Icon name={'ios-chevron-back-sharp'} size={25} color={'#fff'}/>
@@ -63,7 +83,7 @@ const windowHeight = Dimensions.get('window').height;
              <View>
                <LineChart
                 data={{
-                    labels: ["Jan","Feb","July","Aug","Sept","Oct","Oct","Oct","Oct","Oct","Oct","Oct",],
+                    labels: ["Jan","Feb","July","Aug","Sept","Oct","Oct","Oct","Oct","Oct"],
                     datasets: [
                         {
                             data:[
@@ -75,10 +95,9 @@ const windowHeight = Dimensions.get('window').height;
                                   821.000,
                                   776.000,
                                   806.000,
-                                  616.100,
+                                  716.100,
                                   816.000,
-                                  616.100,
-                                  816.000,
+                                
                              ]
                         }
                     ]
@@ -104,14 +123,14 @@ const windowHeight = Dimensions.get('window').height;
                 withVerticalLines={false}
                 withHorizontalLines={false}
                 decorator={() => {
-                  if (tooltipPos.y <= 50 ) {
-                    return tooltipPos.visible ? 
+                  if (this.state.y <= 50 ) {
+                    return this.state.visible ? 
                   
                     <View>
                         <Svg>
                             <Rect 
-                                x={tooltipPos.x - 20} 
-                                y={tooltipPos.y + 20} 
+                                x={this.state.x - 20} 
+                                y={this.state.y + 20} 
                                 width="60" 
                                 height="60"
                                 fill="#2EAEBF"
@@ -119,33 +138,33 @@ const windowHeight = Dimensions.get('window').height;
                                 ry = "10"
                                  />
                                 <TextSVG
-                                    x={tooltipPos.x + 5}
-                                    y={tooltipPos.y + 40}
+                                    x={this.state.x + 5}
+                                    y={this.state.y + 40}
                                     fill="white"
                                     fontSize="16"
                                     fontWeight="bold"
                                     textAnchor="middle">
-                                    {tooltipPos.value}
+                                    {this.state.value}
                                 </TextSVG>
                                 <TextSVG
-                                    x={tooltipPos.x + 5}
-                                    y={tooltipPos.y + 60}
+                                    x={this.state.x + 5}
+                                    y={this.state.y + 60}
                                     fill="white"
                                     fontSize="16"
                                     fontWeight="bold"
                                     textAnchor="middle">
-                                    {tooltipPos.waktu}
+                                    {this.state.waktu}
                                 </TextSVG>
                         </Svg>
                     </View> : null
                   }else{
-                    return tooltipPos.visible ? 
+                    return this.state.visible ? 
                   
                     <View>
                         <Svg>
                             <Rect 
-                                x={tooltipPos.x - 15} 
-                                y={tooltipPos.y - 50} 
+                                x={this.state.x - 15} 
+                                y={this.state.y - 50} 
                                 width="60" 
                                 height="60"
                                 fill="#2EAEBF"
@@ -153,22 +172,22 @@ const windowHeight = Dimensions.get('window').height;
                                 ry = "10"
                                  />
                                 <TextSVG
-                                    x={tooltipPos.x + 5}
-                                    y={tooltipPos.y - 30}
+                                    x={this.state.x + 5}
+                                    y={this.state.y - 30}
                                     fill="white"
                                     fontSize="16"
                                     fontWeight="bold"
                                     textAnchor="middle">
-                                    {tooltipPos.value}
+                                    {this.state.value}
                                 </TextSVG>
                                 <TextSVG
-                                    x={tooltipPos.x + 5}
-                                    y={tooltipPos.y - 10}
+                                    x={this.state.x + 5}
+                                    y={this.state.y - 10}
                                     fill="white"
                                     fontSize="16"
                                     fontWeight="bold"
                                     textAnchor="middle">
-                                    {tooltipPos.waktu}
+                                    {this.state.waktu}
                                 </TextSVG>
                         </Svg>
                     </View> : null
@@ -176,20 +195,27 @@ const windowHeight = Dimensions.get('window').height;
                 
               }}
               onDataPointClick={(data) => {
-          
-                let isSamePoint = (tooltipPos.x === data.x 
-                                    && tooltipPos.y === data.y)
-
-                isSamePoint ? setTooltipPos((previousState) => {
-                    return { 
-                              ...previousState,
-                              value: data.value,
-                              waktu:dataChart[data.index],
-                              visible: !previousState.visible
-                           }
+                let isSamePoint = (this.state.x === data.x 
+                  && this.state.y === data.y)
+                  // isSamePoint ? setthis.state((previousState) => {
+                //     return { 
+                      
+                //               ...previousState,
+                //               value: data.value,
+                //               waktu:dataChart[data.index],
+                //               visible: !this.state.visible
+                //            }
+                // })
+                isSamePoint ? this.setState({
+                  x : this.state.x,
+                  y : this.state.y,
+                  value:data.value,
+                  waktu: dataChart[data.index],
+                  visible: !this.state.visible,
                 })
-                    : 
-                setTooltipPos({ x: data.x, value: data.value, y: data.y, visible: true,waktu:dataChart[data.index] });
+                    : //Else
+                // setthis.state({ x: data.x, value: data.value, y: data.y, visible: true,waktu:dataChart[data.index] });
+                this.setState({ x: data.x, value: data.value, y: data.y, visible: true,waktu:dataChart[data.index] })
 
             }}
                   
@@ -221,7 +247,7 @@ const windowHeight = Dimensions.get('window').height;
         </View>
       </View>
             <StatusBar barStyle="light-content"/>
-
+        </ScrollView>
         </SafeAreaView>  
         
        
@@ -230,6 +256,7 @@ const windowHeight = Dimensions.get('window').height;
     )
     
 }
+    }
 
 
 export default Charts
@@ -312,4 +339,3 @@ const styles = StyleSheet.create({
   },
   
   });
-  
