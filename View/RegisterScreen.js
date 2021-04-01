@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { Component,useState } from 'react';
-import {SafeAreaView, StyleSheet, Text, View,Image,Button, Dimensions,TouchableOpacity,TextInput,ScrollView } from 'react-native';
+import {SafeAreaView, StyleSheet, Text, View,Image,Button, Dimensions,TouchableOpacity,TextInput,ScrollView,Alert } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
@@ -53,19 +53,33 @@ class Register extends React.Component{
     }
     PersonalDataToPin =  () => {
         const { navigation } = this.props;
- 
-        navigation.navigate('pin',{
-            nomorKTP: this.state.nomorKTP,
-            namaLengkap : this.state.namaLengkap,
-            tanggalLahir : this.state.DateDisplay ? moment(this.state.DateDisplay).format(this.state.displayFormat) : '',
-            tempatLahir: this.state.tempatLahir,
-            alamatLengkap : this.state.alamatLengkap,
-            email : this.state.email,
-            password : this.state.password,
-            nomorHP : this.state.nomorHP,
-            konfirmasiPassword : this.state.konfirmasiPassword,
-
-        })
+        if(this.state.nomorKTP == undefined || this.state.namaLengkap == undefined || this.state.DateDisplay == undefined || this.state.tempatLahir == undefined || this.state.alamatLengkap == undefined || this.state.email == undefined || this.state.nomorHP == undefined || this.state.password == undefined){
+            Alert.alert('Register Gagal','Mohon isi semua data registrasi dengan lengkap !',[
+                {text: 'Oke',onPress:() => console.log("closed")}
+            ])
+        }else if(this.state.password.length < 6 ){
+            Alert.alert('Register Gagal','Password Kurang dari 6 digit/karakter !',[
+                {text: 'Oke',onPress:() => console.log("closed")}
+            ])
+        }else if(this.state.konfirmasiPassword != this.state.password){
+            Alert.alert('Register Gagal','Konfirmasi Password Tidak cocok dengan password !',[
+                {text: 'Oke',onPress:() => console.log("closed")}
+            ])
+        }else{
+            navigation.navigate('pin',{
+                nomorKTP: this.state.nomorKTP,
+                namaLengkap : this.state.namaLengkap,
+                tanggalLahir : this.state.DateDisplay ? moment(this.state.DateDisplay).format(this.state.displayFormat) : '',
+                tempatLahir: this.state.tempatLahir,
+                alamatLengkap : this.state.alamatLengkap,
+                email : this.state.email,
+                password : this.state.password,
+                nomorHP : this.state.nomorHP,
+                konfirmasiPassword : this.state.konfirmasiPassword,
+    
+            })
+        }
+        // console.log(this.state.DateDisplay)
     
     }
     render(){
@@ -134,7 +148,7 @@ class Register extends React.Component{
                    
                         <TextInput
                             style={styles.input}
-                            placeholder={'Tempat Lahir Kamu'}
+                            placeholder={'Tanggal Lahir Kamu'}
                             placeholderTextColor={'#666872'}
                             underlineColorAndroid='transparent'
                             // pointerEvents="none"
@@ -172,7 +186,7 @@ class Register extends React.Component{
                 <Text style={styles.LabelInput}>Nomor Handphone</Text>
                 <TextInput
                     style={styles.input}
-                    placeholder={'Nomor Hand Phone'}
+                    placeholder={'Nomor Handphone'}
                     keyboardType = 'number-pad'
                     placeholderTextColor={'#666872'}
                     underlineColorAndroid='transparent'

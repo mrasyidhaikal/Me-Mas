@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import {SafeAreaView, StyleSheet, Text, View,Image, Dimensions,TouchableOpacity,TextInput,ScrollView,Alert } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import moment from 'moment';
 
 import Icon from 'react-native-vector-icons/Ionicons'
 
@@ -35,17 +36,18 @@ class BeliEmas extends React.Component{
 
     checkBerat=()=>{
       const { navigation,route } = this.props;
-      if(this.state.berat  > this.props.route.params.userSaldo ){
+      if(this.state.berat <= 0){
+        Alert.alert('Jual Emas Gagal',"Harap Mengisi Jumlah Emas !",[
+          {text: 'Oke',onPress:() => console.log("closed")}
+        ])
+      }else if(this.state.berat  > this.props.route.params.userSaldo ){
         Alert.alert('Jual Emas Gagal',"Jumlah Emas Melebihi Jumlah Emas yang dimiliki !",[
           {text: 'Oke',onPress:() => console.log("closed")}
         ])
-        // console.log(this.props.route.params.userid)
+        console.log(this.state.berat)
       }else{
-
-
         const {hargaJualToday,token,userid,saldoUang,userSaldo} =  route.params
-   
-        
+          
         navigation.navigate('ListKartu',{berat:this.state.berat,hargaJualToday:hargaJualToday,token:token,userid:userid,saldoUang:saldoUang,userSaldo:userSaldo})
 
       }
@@ -62,7 +64,10 @@ class BeliEmas extends React.Component{
 
     render(){
       const { navigation } = this.props;
-    
+      
+      var day = Date()
+      var dayy = '' + day
+      const today = moment(dayy).format("YYYY-MM-DD")
       return(
         
         <View style={styles.container}>
@@ -85,7 +90,7 @@ class BeliEmas extends React.Component{
                   <Text style={styles.text}>{this.currencyFormat(this.props.route.params.hargaJualToday)}/gr</Text>
                 </View>
                 <View style={{flexDirection:'row',justifyContent:'flex-start',marginLeft:20}}>
-                  <Text style={styles.subText}>Per/01/01/2021</Text>
+                  <Text style={styles.subText}>Per {moment(today).format('DD MMM YYYY')}</Text>
                 </View>
         </View>
         

@@ -90,10 +90,10 @@ class detailJualTransaction extends React.Component{
     getBankUser = async() =>{
       const token = await CallAsyncData.getData('token')
 
-      
+    
       const url = `http://104.248.156.113:8024/api/v1/Dashboard/GetBankUser/${this.state.bankuserid}`
       const response = await CallAPIData.getEmas(token,url)
-      console.log(response)
+
       const {data,statusCode} = response
     
       this.setState({userBankName:data.bankname})

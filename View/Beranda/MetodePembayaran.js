@@ -35,9 +35,13 @@ class Metode extends React.Component{
     }
 
     _renderItem =({item,index}) =>{
-        
-        return(
-    
+      const { navigation,route } = this.props;  
+      const { hargaBeliToday,token,userid,berat } = route.params;
+      var harga = berat * hargaBeliToday
+      console.log(harga)
+
+      if(harga >= 499999){
+        return(      
             <TouchableOpacity style={styles.item} onPress={() => this.checkPin(item.bankid,item.urlicon,item.kategori)} >
               <View style={styles.containerBank}>
                 <View >
@@ -51,9 +55,29 @@ class Metode extends React.Component{
                     
                 </View>
             </View>
-            </TouchableOpacity>
-        
+            </TouchableOpacity>        
         )
+      }else{
+          if(item.bankid != 'bfmx19udvhlSME5y'){
+              return(      
+                <TouchableOpacity style={styles.item} onPress={() => this.checkPin(item.bankid,item.urlicon,item.kategori)} >
+                  <View style={styles.containerBank}>
+                    <View >
+                        <Image style={styles.imageBank}   
+                        source={{
+                        uri: item.urlicon,
+                        }}/> 
+                    </View>
+                    <View style={{padding:7}}>
+                        <Text style={styles.textBerat}>{item.bankname}</Text>
+                        
+                    </View>
+                </View>
+                </TouchableOpacity>        
+            )
+          }
+      }
+        
     }
     checkPin = (bankid,urlicon,kategori) =>{
     const { navigation,route } = this.props;  
@@ -125,18 +149,15 @@ class Metode extends React.Component{
           }
           numColumns = {numColumn}
           />
-        </View>
+        </View>   
+          <Text style={styles.textNote}>
+            Note :
+          </Text>
+          <Text style={styles.textNote}>
+            Untuk Pembayaran VA Via BCA Minimal Transaksi Rp 500.000
+          </Text>
 
-        
-      
-     
-       
 
-         
-        
-       
-        
-       
         </SafeAreaView>  
     
       </View>
@@ -180,6 +201,14 @@ const styles = StyleSheet.create({
       fontSize : 25,
       marginTop: 5 ,
     //  fontFamily: 'Roboto-Bold',
+    },
+    textNote:{
+      color: '#666872',
+      fontSize: 12,
+      width: windowHeight/3,
+      paddingRight:20,
+      left:25,
+      alignItems:'center',
     },
     textBerat: {
       color : '#fff',

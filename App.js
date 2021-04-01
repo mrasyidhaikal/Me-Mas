@@ -20,6 +20,7 @@ import BeliEmas from './View/Beranda/BeliEmas';
 import JualEmas from './View/Beranda/JualEmas';
 import Profile from './View/Beranda/Profile';
 import ChangePassword from './View/Beranda/ChangePassword'
+import ChangePin from './View/Beranda/ChangePin'
 import metodePembayaran from './View/Beranda/MetodePembayaran'
 import pinConfirmation from './View/Beranda/PinConfirmation'
 import detail from './View/Beranda/detail'
@@ -96,13 +97,13 @@ const HomeStackScreen = ({navigation,route}) =>{
     <HomeStack.Screen name="Beranda" component={Beranda}  />
     <HomeStack.Screen name="Grafik" component={GrafikScreen}  />
 
-        <HomeStack.Screen name="Profile" component={Profile}  />
-        <HomeStack.Screen name="beliEmas"component={BeliEmas}/>
-        <HomeStack.Screen name="metodePembayaran"component={metodePembayaran}/>
-        <HomeStack.Screen name="pinConfirmation" component={pinConfirmation} />
-        <HomeStack.Screen name="detail" component={detailTransaction} />
-        <HomeStack.Screen name="detailJual" component={detailJualTransaction} />
-        <HomeStack.Screen name="jualEmas" component={JualEmas} />
+    <HomeStack.Screen name="Profile" component={Profile}  />
+    <HomeStack.Screen name="beliEmas"component={BeliEmas}/>
+    <HomeStack.Screen name="metodePembayaran"component={metodePembayaran}/>
+    <HomeStack.Screen name="pinConfirmation" component={pinConfirmation} />
+    <HomeStack.Screen name="detail" component={detailTransaction} />
+    <HomeStack.Screen name="detailJual" component={detailJualTransaction} />
+    <HomeStack.Screen name="jualEmas" component={JualEmas} />
     {/* <HomeStack.Screen 
       name="IsiHomeStack" 
       component={IsiHomeStacks}
@@ -113,6 +114,9 @@ const HomeStackScreen = ({navigation,route}) =>{
     <HomeStack.Screen name="TambahKartu" component={TambahKartu} />
     <HomeStack.Screen name="ListKartu" component={ListKartu} />
     <HomeStack.Screen name="KonfirmasiJual" component={KonfirmasiJual} />
+    <HomeStack.Screen name="ChangePassword" component={ChangePassword} />
+    <HomeStack.Screen name="ChangePin" component={ChangePin} />
+    <HomeStack.Screen name="Login" component={RegisterTab} />
 
   </HomeStack.Navigator>
   )

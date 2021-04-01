@@ -15,6 +15,11 @@ class pin extends React.Component{
             PINCode: "",
         }
     }
+    movetoLogin = () =>{
+      const { navigation } = this.props;  
+      navigation.navigate('Login') 
+    }
+
     onSubmit = async () => {
       
       const response = await CallAPIData.getAPI('http://104.248.156.113:8024/api/v1/Account/signup',
@@ -47,14 +52,13 @@ class pin extends React.Component{
           "connid": "string"
       })
         )
-        console.log(response)
         const {data,statusCode} = response
         if (statusCode == 200) {
-          Alert.alert('Okeeee',data.head,[
-            {text: 'Oke',onPress:() => console.log("closed")}
+          Alert.alert('Registrasi Berhasil !',data.head,[
+            {text: 'Oke',onPress:() => this.movetoLogin()}
           ])
         }else{
-          Alert.alert('Login Gagal',data.head,[
+          Alert.alert('Registrasi Gagal',data.head,[
             {text: 'Oke',onPress:() => console.log("closed")}
           ])
         }

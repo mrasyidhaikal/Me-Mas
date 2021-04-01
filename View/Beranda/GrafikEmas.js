@@ -75,6 +75,7 @@ const windowHeight = Dimensions.get('window').height;
           ]
       }
      
+
         this.setState({dataEmas:dataEmas,hargaBeliToday:hargaBeliToday,beliPersen:beliPersen})
         this.checkDownOrUpBeli()
     
@@ -91,6 +92,7 @@ const windowHeight = Dimensions.get('window').height;
       currencyFormat(num) {
         return 'Rp ' + num.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')
      }
+
       componentDidMount(){
         this.getHarga()
        }
@@ -147,6 +149,7 @@ render(){
 
              <View>
                <LineChart
+
                 data={{
                  
                   datasets: [
