@@ -30,6 +30,7 @@ import TambahKartu from './View/Beranda/TambahKartu'
 import UpdateKartu from './View/Beranda/UpdateKartu'
 import ListKartu from './View/Beranda/ListKartu'
 import KonfirmasiJual from './View/Beranda/KonfirmasiJual'
+import TransaksiSelesai from './View/Transaksi/TransaksiSelesai'
 // import login from './View/login'
 
 const { width: WIDTH} = Dimensions.get('window');
@@ -125,6 +126,7 @@ const TransaksiStackScreen = () =>{
     <TransaksiStack.Screen name="Transaksi" component={Transaksi}  />
     <TransaksiStack.Screen name="detailTransaction" component={detailTransaction} />
     <TransaksiStack.Screen name="detailJualTransaction" component={detailJualTransaction} />
+    <TransaksiStack.Screen name="TransaksiSelesai" component={TransaksiSelesai} />
   </TransaksiStack.Navigator>
   )
 }
