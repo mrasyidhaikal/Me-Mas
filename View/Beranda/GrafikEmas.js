@@ -28,6 +28,10 @@ const windowHeight = Dimensions.get('window').height;
             value:0,
             waktu:"",
             dataEmas:[],
+            hargaBeliToday:0,
+            beliPersen:0,
+            iconBeli:'',
+            warnaBeli:'',
           }
       }
   
@@ -71,12 +75,24 @@ const windowHeight = Dimensions.get('window').height;
           ]
       }
      
-        this.setState({dataEmas:dataEmas})
-        console.log(this.state.dataEmas)
+
+        this.setState({dataEmas:dataEmas,hargaBeliToday:hargaBeliToday,beliPersen:beliPersen})
+        this.checkDownOrUpBeli()
     
-  
+
   
       }
+      checkDownOrUpBeli(){
+        if (this.state.beliPersen < 0) {
+          this.setState({iconBeli:'ios-caret-down',warnaBeli:'#E14C4C'})
+        }else{
+          this.setState({iconBeli:'ios-caret-up',warnaBeli:'#2DAF7E'})
+        }
+      }
+      currencyFormat(num) {
+        return 'Rp ' + num.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')
+     }
+
       componentDidMount(){
         this.getHarga()
        }
@@ -116,10 +132,10 @@ render(){
                       </View>
 
                       <View style={{marginLeft:70}}>
-                      <Text style={styles.text}>Rp. 840.000/gr</Text>
+                      <Text style={styles.text}>{this.currencyFormat(this.state.hargaBeliToday)}/gr</Text>
                         <View style={styles.iconPersen}>
-                          <Icon name={'ios-caret-down'} size={11} color={'#E14C4C'} />
-                          <Text style={{fontSize:9,color:'#E14C4C'}}>0.25%</Text>
+                        <Icon name={this.state.iconBeli} size={11} color={this.state.warnaBeli} />
+                                <Text style={{fontSize:9,color:`${this.state.warnaBeli}`}}>{Number((this.state.beliPersen).toFixed(2))}%</Text>
                     </View>
                       </View>
                 </View>
@@ -133,26 +149,27 @@ render(){
 
              <View>
                <LineChart
-                // data={{              
-                //   datasets: [
-                //       {
-                //           data:[
-                //                 876.000,
-                //                 826.000,
-                //                 810.000,
-                //                 866.000,
-                //                 878.000,
-                //                 821.000,
-                //                 776.000,
-                //                 806.000,
-                //                 716.100,
-                //                 816.000,
+
+                data={{
+                 
+                  datasets: [
+                      {
+                          data:[
+                                876.000,
+                                826.000,
+                                810.000,
+                                866.000,
+                                878.000,
+                                821.000,
+                                776.000,
+                                806.000,
+                                716.100,
+                                816.000,
                               
-                //            ]
-                //       }
-                //   ]
-              // }}
-                data={this.state.dataEmas}
+                           ]
+                      }
+                  ]
+              }}
                 
                 width = {Dimensions.get("window").width}
                 height = {250}
