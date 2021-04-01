@@ -14,7 +14,7 @@ const windowHeight = Dimensions.get('window').height;
 const numColumn = 1
 
 
-class Transaksi extends React.Component{
+class TransaksiSelesai extends React.Component{
   
     constructor() {
      
@@ -36,7 +36,7 @@ class Transaksi extends React.Component{
 
     _renderItem =({item,index}) =>{
     
-        if(item.transaksitype == 'Jual' && item.status =='Pending'){
+        if(item.transaksitype == 'Jual' && item.status == 'Batal' || item.status == 'Selesai'){
           return(
     
             <TouchableOpacity style={styles.item} onPress={() => this.checkTransaction(item.transaksiid,item.transaksitype)}>
@@ -72,8 +72,7 @@ class Transaksi extends React.Component{
             </TouchableOpacity>
         
         )
-        let tambahJam = moment(item.transaksidate).add(3, "hours").format("DD MMM YYYY HH:mm")
-        }else if(item.transaksitype == 'Beli' && item.status =='Pending' || item.status =='Menunggu Pembayaran'){
+        }else if(item.transaksitype == 'Beli' && item.status =='Batal' || item.status == 'Selesai'){
           return(
     
             <TouchableOpacity style={styles.item} onPress={() => this.checkTransaction(item.transaksiid,item.transaksitype)}>
@@ -184,12 +183,13 @@ class Transaksi extends React.Component{
                   <Text style={styles.logoText}>Transaksi</Text>
                   </View>
                   <View style={styles.boxHorizontal}>
-                  <TouchableOpacity>
-                      <Text style={{color:'#fff',fontSize:16,fontWeight:'bold'}}>Pending</Text>
-                      <View style={{borderBottomWidth:2,borderBottomColor:"#FFC52F",marginTop:3}}></View>
+                  <TouchableOpacity  onPress={() => navigation.navigate('Transaksi')}>
+                      <Text style={styles.text}>Pending</Text>
+                    
                   </TouchableOpacity>
-                  <TouchableOpacity style={{marginLeft:20}} onPress={() => navigation.navigate('TransaksiSelesai')}>
-                      <Text style={styles.text}>Selesai</Text>
+                  <TouchableOpacity style={{marginLeft:20}} >
+                      <Text style={{color:'#fff',fontSize:16,fontWeight:'bold'}}>Selesai</Text>
+                      <View style={{borderBottomWidth:2,borderBottomColor:"#FFC52F",marginTop:3}}></View>
                   </TouchableOpacity>
                  </View>
               
@@ -220,7 +220,7 @@ class Transaksi extends React.Component{
 }
 
 
-export default Transaksi
+export default TransaksiSelesai
 
 
 const styles = StyleSheet.create({

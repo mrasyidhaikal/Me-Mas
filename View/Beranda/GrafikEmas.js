@@ -3,7 +3,9 @@ import {SafeAreaView, StyleSheet, Text, View,Image,Button, Dimensions,TouchableO
 import { LineChart } from "react-native-chart-kit";
 import { Rect, Text as TextSVG, Svg } from "react-native-svg";
 import Icon from 'react-native-vector-icons/Ionicons'
-
+import moment from 'moment';
+import CallAPIData from './../../Controller/CallAPI';
+import CallAsyncData from './../../Controller/CallAsyncData';
 const { width: WIDTH} = Dimensions.get('window');
 const windowHeight = Dimensions.get('window').height;
   export const dataChart = ["May","June","July","Aug","Sept","Oct","Oct","Oct","Oct","Oct",]
@@ -18,22 +20,87 @@ const windowHeight = Dimensions.get('window').height;
       constructor() {
        
           super()
-    
+         
           this.state = {
             x:0,
             y:0,
             visible:false,
             value:0,
             waktu:"",
+            dataEmas:[],
+            hargaBeliToday:0,
+            beliPersen:0,
+            iconBeli:'',
+            warnaBeli:'',
           }
       }
   
+      getHarga = async() => {
+
+
+        const today = moment(Date()).format("YYYY-MM-DD")
+        const yesterDay =moment(Date()).add(-31,'days').format("YYYY-MM-DD")
+
+
+        const url = `http://104.248.156.113:8024/api/v1/Dashboard/GetHargaEmas/${yesterDay}/${today}`
+        const response = await CallAPIData.getEmas(this.state.token,url)
+        const {data,statusCode} = response
+         
+        
+        let jualPersen = ((data[0].hargajual/data[1].hargajual)-1)*100
+        let beliPersen = ((data[0].hargabeli/data[1].hargabeli)-1)*100
+        let hargaBeliToday = data[0].hargabeli
+        let hargaJualToday = data[0].hargajual
+
+        let bulan = moment(data[0].emasdate).format('MMMM')
+
+        let dataEmas={
+        
+          datasets: [
+              {
+                  data:[
+                    data[0].hargabeli,
+                    data[1].hargabeli,
+                    data[2].hargabeli,
+                    data[3].hargabeli,
+                    data[4].hargabeli,
+                    data[5].hargabeli,
+                    data[6].hargabeli,
+                    data[7].hargabeli,
+                    data[8].hargabeli,
+                    data[9].hargabeli,
+                      
+                   ]
+              }
+          ]
+      }
+     
+
+        this.setState({dataEmas:dataEmas,hargaBeliToday:hargaBeliToday,beliPersen:beliPersen})
+        this.checkDownOrUpBeli()
+    
+
   
+      }
+      checkDownOrUpBeli(){
+        if (this.state.beliPersen < 0) {
+          this.setState({iconBeli:'ios-caret-down',warnaBeli:'#E14C4C'})
+        }else{
+          this.setState({iconBeli:'ios-caret-up',warnaBeli:'#2DAF7E'})
+        }
+      }
+      currencyFormat(num) {
+        return 'Rp ' + num.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')
+     }
+
+      componentDidMount(){
+        this.getHarga()
+       }
     
 render(){
   const { navigation,route } = this.props;  
+
  
-      
       
     return(
         
@@ -65,10 +132,10 @@ render(){
                       </View>
 
                       <View style={{marginLeft:70}}>
-                      <Text style={styles.text}>Rp. 840.000/gr</Text>
+                      <Text style={styles.text}>{this.currencyFormat(this.state.hargaBeliToday)}/gr</Text>
                         <View style={styles.iconPersen}>
-                          <Icon name={'ios-caret-down'} size={11} color={'#E14C4C'} />
-                          <Text style={{fontSize:9,color:'#E14C4C'}}>0.25%</Text>
+                        <Icon name={this.state.iconBeli} size={11} color={this.state.warnaBeli} />
+                                <Text style={{fontSize:9,color:`${this.state.warnaBeli}`}}>{Number((this.state.beliPersen).toFixed(2))}%</Text>
                     </View>
                       </View>
                 </View>
@@ -82,26 +149,28 @@ render(){
 
              <View>
                <LineChart
+
                 data={{
-                    labels: ["Jan","Feb","July","Aug","Sept","Oct","Oct","Oct","Oct","Oct"],
-                    datasets: [
-                        {
-                            data:[
-                                  876.000,
-                                  826.000,
-                                  810.000,
-                                  866.000,
-                                  878.000,
-                                  821.000,
-                                  776.000,
-                                  806.000,
-                                  716.100,
-                                  816.000,
-                                
-                             ]
-                        }
-                    ]
-                }}
+                 
+                  datasets: [
+                      {
+                          data:[
+                                876.000,
+                                826.000,
+                                810.000,
+                                866.000,
+                                878.000,
+                                821.000,
+                                776.000,
+                                806.000,
+                                716.100,
+                                816.000,
+                              
+                           ]
+                      }
+                  ]
+              }}
+                
                 width = {Dimensions.get("window").width}
                 height = {250}
                 

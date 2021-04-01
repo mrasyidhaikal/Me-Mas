@@ -1,8 +1,10 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { Component } from 'react';
-import {SafeAreaView, StyleSheet, Text, View,Image, Dimensions,TouchableOpacity,TextInput,FlatList,ScrollView } from 'react-native';
+import {SafeAreaView, StyleSheet, Text, View,Image, Dimensions,TouchableOpacity,TextInput,FlatList,ScrollView,Alert,ToastAndroid } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import CallAsyncData from './../../Controller/CallAsyncData';
+import CallAPIData from './../../Controller/CallAPI';
 
 import Icon from 'react-native-vector-icons/Ionicons'
 
@@ -16,7 +18,10 @@ class ChangePassword extends React.Component{
         super()
         this.state = {
             showPass:true,
-            press:false
+            press:false,
+            oldpassword:'',
+            newpassword:'',
+            confirmpassword:'',
         }
     }
     showPass = () => {
@@ -26,6 +31,61 @@ class ChangePassword extends React.Component{
             this.setState({ showPass: true, press:false })
         }
     }
+
+    showToast = (val) => {
+      ToastAndroid.show(val, ToastAndroid.SHORT);
+    };
+
+    onSubmit = async() =>{
+      const { navigation,route } = this.props; 
+
+      const token = await CallAsyncData.getData('token')
+      const userid = await CallAsyncData.getData('userid')
+      const userEmail = await CallAsyncData.getData('email')
+      if(this.state.oldpassword == ''){
+        Alert.alert('Ubah Password Gagal','Password tidak boleh kosong',[
+          {text: 'Oke',onPress:() => console.log("closed")}
+         ])
+      }else if(this.state.newpassword == ''){
+        Alert.alert('Ubah Password Gagal','Password tidak boleh kosong',[
+          {text: 'Oke',onPress:() => console.log("closed")}
+         ])
+      }else if(this.state.confirmpassword == ''){
+        Alert.alert('Ubah Password Gagal','Password tidak boleh kosong',[
+          {text: 'Oke',onPress:() => console.log("closed")}
+         ])
+      }else if(this.state.newpassword != this.state.confirmpassword){
+        Alert.alert('Ubah Password Gagal','Password Baru Tidak Sama !',[
+          {text: 'Oke',onPress:() => console.log("closed")}
+         ])
+      }else{
+          const response = await CallAPIData.postAPIToken('http://104.248.156.113:8024/api/v1/Account/changepassword',JSON.stringify({
+            "email": userEmail,
+            "userid": userid,
+            "oldpassword": this.state.oldpassword,
+            "newpassword": this.state.newpassword,
+            "confirmpassword": this.state.confirmpassword,
+          }),token)
+      
+        const {data,statusCode} = response
+
+        // console.log(response)
+
+        if (statusCode == 200) {
+          if(data.success == true){
+            this.showToast('Ubah Password Sukses !')
+            navigation.navigate('Profile')
+          }else{
+            Alert.alert('Ubah Password Gagal',data.text,[
+              {text: 'Oke',onPress:() => console.log("closed")}
+              ])
+          }
+        }
+        
+      }
+     
+      
+  }
   
  
    
@@ -52,6 +112,7 @@ class ChangePassword extends React.Component{
                 <TextInput
                     style={styles.input}
                     placeholder={'Password Lama'}
+                    onChangeText={val => this.setState({oldpassword:val})}
                     secureTextEntry = {true}
                     placeholderTextColor={'#666872'}
                     underlineColorAndroid='transparent'
@@ -62,6 +123,7 @@ class ChangePassword extends React.Component{
                 <TextInput
                     style={styles.input}
                     placeholder={'Password Baru'}
+                    onChangeText={val => this.setState({newpassword:val})}
                     secureTextEntry = {true}
                     placeholderTextColor={'#666872'}
                     underlineColorAndroid='transparent'
@@ -72,24 +134,17 @@ class ChangePassword extends React.Component{
                 <TextInput
                     style={styles.input}
                     placeholder={'Konfirmasi Password Baru'}
+                    onChangeText={val => this.setState({confirmpassword:val})}
                     secureTextEntry = {true}
                     placeholderTextColor={'#666872'}
                     underlineColorAndroid='transparent'
                 />
           
         </View>
-       
-
-     
-       
-
-         
-        
-          <TouchableOpacity>
-          <View style={styles.keamanan}>
-
-            <View style={{flex:1,alignItems:'center'}}>    
                
+          <TouchableOpacity onPress={this.onSubmit}>
+          <View style={styles.keamanan}>
+            <View style={{flex:1,alignItems:'center'}}>    
                 <Text style={styles.text}>Ubah Password</Text>
             </View>  
 

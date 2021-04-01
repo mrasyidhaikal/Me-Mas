@@ -1,11 +1,12 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { Component } from 'react';
-import {SafeAreaView, StyleSheet, Text, View,Image, Dimensions,TouchableOpacity,TextInput,FlatList,ScrollView } from 'react-native';
+import {SafeAreaView, StyleSheet, Text, View,Image, Dimensions,TouchableOpacity,TextInput,FlatList,ScrollView,Alert } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import moment from 'moment';
 import Icon from 'react-native-vector-icons/Ionicons'
 import { render } from 'react-dom';
+import { createIconSetFromFontello } from 'react-native-vector-icons';
 
 const { width: WIDTH} = Dimensions.get('window');
 const windowHeight = Dimensions.get('window').height;
@@ -59,7 +60,7 @@ class BeliEmas extends React.Component{
                   <Text style={styles.text}>{this.currencyFormat(hargaBeliToday)}/gr</Text>
                 </View>
                 <View style={{flexDirection:'row',justifyContent:'flex-start',marginLeft:20}}>
-                  <Text style={styles.subText}>Per {today}</Text>
+                  <Text style={styles.subText}>Per {moment(today).format('DD MMM YYYY')}</Text>
                 </View>
         </View>
 
@@ -80,17 +81,21 @@ class BeliEmas extends React.Component{
       </View>
       )
     }
-    MetodePemabayran = () =>{
+    MetodePembayaran = () =>{
       const { navigation,route } = this.props;  
       const { hargaBeliToday,token,userid } = route.params;
-    
-      if (this.state.gramEmasButton == 0) {
+      var harga = this.state.gramEmasButton * hargaBeliToday
+
+      if(harga < 100000){
+        Alert.alert('Transaksi Gagal','Pembelian Emas Minimal Rp 100.000',[
+          {text: 'Oke',onPress:() => console.log("closed")}
+         ])
+      }else if (this.state.gramEmasButton == 0) {
         console.log("gagal")
       }else{
         navigation.navigate('metodePembayaran',{berat:this.state.gramEmasButton,token:token,userid:userid,hargaBeliToday:hargaBeliToday})
       }
-
-    
+      
     }
 
     _CobaBawah =() =>{
@@ -112,7 +117,7 @@ class BeliEmas extends React.Component{
         </View>
         
       <View style={{alignSelf:'center'}}>
-      <TouchableOpacity onPress={this.MetodePemabayran} style={styles.btnLogin} >
+      <TouchableOpacity onPress={this.MetodePembayaran} style={styles.btnLogin} >
                   <Text style={styles.text}>Beli Emas</Text>
       </TouchableOpacity>
       </View>
@@ -121,7 +126,7 @@ class BeliEmas extends React.Component{
     }else{
       return(
         <View style={{alignSelf:'center'}}>
-        <TouchableOpacity onPress={this.MetodePemabayran} style={styles.btnLogin} >
+        <TouchableOpacity onPress={this.MetodePembayaran} style={styles.btnLogin} >
                     <Text style={styles.text}>Beli Emas</Text>
         </TouchableOpacity>
         </View>
@@ -200,7 +205,6 @@ class BeliEmas extends React.Component{
             </View>
               </ScrollView>
       
-        
        
        
     

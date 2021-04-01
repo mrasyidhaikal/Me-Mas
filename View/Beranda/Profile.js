@@ -4,17 +4,13 @@ import {SafeAreaView, StyleSheet, Text, View,Image, Dimensions,TouchableOpacity,
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import CallAsyncData from './../../Controller/CallAsyncData';
+import moment from 'moment';
 import Icon from 'react-native-vector-icons/Ionicons'
 
 const { width: WIDTH} = Dimensions.get('window');
 const windowHeight = Dimensions.get('window').height;
-console.log(windowHeight);
-const profile = [
-    {nama:'Email',key:'mrasyid.haikal@gmail.com'},
-    {nama:'Nama Lengkap',key:'M Rasyid Khaikal'},
-    {nama:'Alamat',key:'Melchem'},
-    {nama:'Nomor KTP',key:'511243'},
-    {nama:'Tempat Lahir',key:'Tempat Lahir'}]
+
 const numColumn = 1
 
 
@@ -24,24 +20,36 @@ class Profile extends React.Component{
         super()
         this.state = {
             showPass:true,
-            press:false
+            press:false,
+            dataprofile:[],
         }
     }
 
     getProfile = async() =>{
-      const { navigation,route } = this.props;  
-      const { transactionID } = route.params;
-
         const token = await CallAsyncData.getData('token')
-        const url = `http://104.248.156.113:8024/api/v1/Dashboard/GetTransaksi/${transactionID}`
-        const response = await CallAPIData.getEmas(token,url)
-        const {data,statusCode} = response
-        this.setState({data:data,total:data.total,transaksidate:data.transaksidate,hargaJual:data.harga})
-        this.getBank()
-        var dateTransaksii = new Date(this.state.data.transaksidate)
-        this.setState({dateTransaksi:moment(dateTransaksii).add(3, "hours").format("YYYY-MM-DD HH:mm")})
-        
+        const emailUser = await CallAsyncData.getData('email')
+        const userName = await CallAsyncData.getData('name')
+        const userPhone = await CallAsyncData.getData('phone')
+        const userBirth = await CallAsyncData.getData('tgllahir')
+        const userBirthPlace = await CallAsyncData.getData('kotalahir')
+        const userKTP = await CallAsyncData.getData('noktp')
+        const userAddress = await CallAsyncData.getData('address')
 
+        // Profile Data
+        const profile = [
+          {nama:'Email',key:emailUser},
+          {nama:'Nama Lengkap',key:userName},
+          {nama:'Nomor KTP',key:userKTP},
+          {nama:'Alamat',key:userAddress},
+          {nama:'No. Handphone',key:userPhone},
+          {nama:'Tempat Lahir',key:userBirthPlace},
+          {nama:'Tanggal Lahir',key:moment(userBirth).format('DD MMM YYYY')}]
+          
+          this.setState({dataprofile:profile})
+      }
+
+      componentDidMount(){
+        this.getProfile()
       }
 
     _renderItem =({item,index}) =>{
@@ -60,7 +68,7 @@ class Profile extends React.Component{
       const { navigation } = this.props;
       try{
         await AsyncStorage.clear()
-          navigation.navigate('Login')
+          navigation.push('Login')
       }catch(err){
         console.log(err)
       }
@@ -90,7 +98,7 @@ class Profile extends React.Component{
         </View>
         <View>
         <FlatList
-          data={profile}
+          data={this.state.dataprofile}
           renderItem = {this._renderItem}
           keyExtractor={(item, index)=> index.toString()}
           numColumns = {numColumn}
@@ -136,7 +144,7 @@ class Profile extends React.Component{
           </View>
           </TouchableOpacity>
 
-        <TouchableOpacity >
+        <TouchableOpacity onPress={() => navigation.push('ChangePin') }>
           <View style={styles.keamanan}>
 
             <View style={{flex:0.5,flexDirection:'row',alignItems:'center'}}>    

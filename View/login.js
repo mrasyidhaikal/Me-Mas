@@ -78,9 +78,10 @@ class login extends React.Component{
                   token : data.token
                 })
                 //dont forget add token
+                console.log(data.token)
               }else{
               
-                Alert.alert('Login Gagal',data.head,[
+                Alert.alert('Login Gagal','Periksa Kembali Email dan Password anda !',[
                   {text: 'Oke',onPress:() => console.log("closed")}
                 ])
               } 
@@ -103,7 +104,7 @@ class login extends React.Component{
         <SafeAreaView>
             <View style={styles.logoContainer}>
         <Text style={styles.logoText}>Selamat Datang</Text>
-        <Text style={styles.logoText}>Kembalii</Text>
+        <Text style={styles.logoText}>Kembali</Text>
             </View>
 
             <View style={styles.bottomContainer}>
