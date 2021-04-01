@@ -55,8 +55,9 @@ class detailJualTransaction extends React.Component{
         const url = `http://104.248.156.113:8024/api/v1/Dashboard/GetTransaksi/${transactionID}`
         const response = await CallAPIData.getEmas(token,url)
         const {data,statusCode} = response
-        this.setState({data:data,total:data.total,transaksidate:data.transaksidate,hargaJual:data.harga})
+        this.setState({data:data,total:data.total,transaksidate:data.transaksidate,hargaJual:data.harga,bankuserid:data.bankuserid})
         this.getBank()
+        this.getBankUser()
         var dateTransaksii = new Date(this.state.data.transaksidate)
         this.setState({dateTransaksi:moment(dateTransaksii).add(3, "hours").format("YYYY-MM-DD HH:mm")})
         
@@ -85,18 +86,16 @@ class detailJualTransaction extends React.Component{
       this.setState({dataBank:data})
 
     }
-    // getBankUser = async() =>{
-    //   const token = await CallAsyncData.getData('token')
-    //   const { navigation,route } = this.props;
-    //   const { bankUserID } = route.params;
+    getBankUser = async() =>{
+      const token = await CallAsyncData.getData('token')
     
-    //   const url = `http://104.248.156.113:8024/api/v1/Dashboard/GetBankUser/${bankUserID}`
-    //   const response = await CallAPIData.getEmas(token,url)
-    //   const {data,statusCode} = response
+      const url = `http://104.248.156.113:8024/api/v1/Dashboard/GetBankUser/${this.state.bankuserid}`
+      const response = await CallAPIData.getEmas(token,url)
+      const {data,statusCode} = response
     
-    //   this.setState({userBankName:data.bankname})
+      this.setState({userBankName:data.bankname})
 
-    // }
+    }
 
     _renderItem =({item,index}) =>{
         if (this.state.data.bankid == item.bankid) {

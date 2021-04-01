@@ -29,6 +29,18 @@ class CallData extends React.Component{
             else if (UserData == "phone") {
               return newData.phone
             }
+            else if (UserData == "address") {
+              return newData.address
+            }
+            else if (UserData == "kotalahir") {
+              return newData.kotalahir
+            }
+            else if (UserData == "noktp") {
+              return newData.noktp
+            }
+            else if (UserData == "tgllahir") {
+              return newData.tgllahir
+            }
             else if (UserData == "tokenExpire") {
               return moment(newData.tokenExpire).format("YYYY-MM-DD hh:mm")
             }
