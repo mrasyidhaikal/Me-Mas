@@ -21,9 +21,7 @@ class DataRekening extends React.Component{
             showPass:true,
             press:false,
             data:[],
-
             refreshing: false,
-
             selectedId:'',
 
         }
@@ -112,6 +110,7 @@ class DataRekening extends React.Component{
            
         <SafeAreaView>
         <ScrollView
+          style={{height:windowHeight}}
           refreshControl={
             <RefreshControl
               refreshing={this.state.refreshing}

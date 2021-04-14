@@ -8,6 +8,9 @@ import CallAsyncData from './../../Controller/CallAsyncData';
 import CallAPIData from './../../Controller/CallAPI';
 import Icon from 'react-native-vector-icons/Ionicons'
 import moment from 'moment';
+import GestureRecognizer, {swipeDirections} from 'react-native-swipe-gestures';
+
+
 const { width: WIDTH} = Dimensions.get('window');
 const windowHeight = Dimensions.get('window').height;
 
@@ -30,6 +33,7 @@ class Transaksi extends React.Component{
             data : [],
             selectedId:'',
             harga : 0,
+            gestureName: 'none',
             refreshing: false,
         }
     }
@@ -46,7 +50,7 @@ class Transaksi extends React.Component{
                     <Icon name={'chevron-up'} size={20} color={'#fff'} />
                   </View>
                   <View style={{padding:5}}>
-                      <Text style={styles.textBerat}>Penjualan Emas</Text>
+                      <Text style={styles.textBerat}>Penjualan Emas [Pending]</Text>
                   </View>
               </View>
               
@@ -83,7 +87,7 @@ class Transaksi extends React.Component{
                     <Icon name={'chevron-down'} size={20} color={'#fff'} />
                   </View>
                   <View style={{padding:5}}>
-                      <Text style={styles.textBerat}>Pembelian Emas</Text>
+                      <Text style={styles.textBerat}>Pembelian Emas [Pending]</Text>
                   </View>
               </View>
               
@@ -115,9 +119,9 @@ class Transaksi extends React.Component{
     checkTransaction = (transactionID,transaksitype) =>{
           const { navigation } = this.props;  
           if(transaksitype == 'Beli'){
-              navigation.navigate('detailTransaction',{transactionID:transactionID})
+              navigation.navigate('TransaksiStackScreen',{screen:'detailTransaction',params:{transactionID:transactionID}})
           }else if(transaksitype == 'Jual'){
-               navigation.navigate('detailJualTransaction',{transactionID:transactionID})
+               navigation.navigate('TransaksiStackScreen',{screen:'detailJualTransaction',params:{transactionID:transactionID}})
           }
     }
     currencyFormat(num) {
@@ -148,13 +152,28 @@ class Transaksi extends React.Component{
        }
     }
 
+
+    onSwipe(gestureName, gestureState) {
+      const {SWIPE_UP, SWIPE_DOWN, SWIPE_LEFT, SWIPE_RIGHT} = swipeDirections;
+       const { navigation,route } = this.props;
+      //  console.log(gestureName)
+      this.setState({gestureName: gestureName});
+      switch (gestureName) {
+        case SWIPE_LEFT:
+
+            navigation.navigate('TransaksiStackScreen',{screen:'TransaksiSelesai'})
+
+          break;
+      }
+    }
+
     getBank = () => {
        
        
         // const url = `http://104.248.156.113:8024/api/v1/Dashboard/GetBank`
         // const response = await CallAPIData.getEmas(token,url)
         // const {data,statusCode} = response
-        // console.log(response)
+        // (response)
 
       }
       componentDidMount(){
@@ -164,13 +183,20 @@ class Transaksi extends React.Component{
     render(){
      
       const { navigation } = this.props;
+
+      const config = {
+        velocityThreshold: 0.3,
+        directionalOffsetThreshold: 50
+      };
       
     return(
-        
+      
+             
         <View style={styles.container}>
            
-        <SafeAreaView>
+          <SafeAreaView>
           <ScrollView
+          style={{height:windowHeight}}
             refreshControl={
               <RefreshControl
                 refreshing={this.state.refreshing}
@@ -178,38 +204,46 @@ class Transaksi extends React.Component{
               />
             }
           >
-              <View style={styles.NavBackContainer}>
-                
-                  <View>
-                  <Text style={styles.logoText}>Transaksi</Text>
-                  </View>
-                  <View style={styles.boxHorizontal}>
-                  <TouchableOpacity>
-                      <Text style={{color:'#fff',fontSize:16,fontWeight:'bold'}}>Pending</Text>
-                      <View style={{borderBottomWidth:2,borderBottomColor:"#FFC52F",marginTop:3}}></View>
-                  </TouchableOpacity>
-                  <TouchableOpacity style={{marginLeft:20}} onPress={() => navigation.navigate('TransaksiSelesai')}>
-                      <Text style={styles.text}>Selesai</Text>
-                  </TouchableOpacity>
-                 </View>
-              
-              </View>
+              <GestureRecognizer
+                  onSwipe={(direction, state) => this.onSwipe(direction, state)}
+                  config={config}
+                  >
 
+                <View style={styles.NavBackContainer}>
+                
+                  
+                    <View>
+                    <Text style={styles.logoText}>Transaksi</Text>
+                    </View>
+                    <View style={styles.boxHorizontal}>
+                    <TouchableOpacity>
+                        <Text style={{color:'#fff',fontSize:16,fontWeight:'bold'}}>Pending</Text>
+                        <View style={{borderBottomWidth:2,borderBottomColor:"#FFC52F",marginTop:3}}></View>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={{marginLeft:20}} onPress={() => navigation.navigate('TransaksiStackScreen',{screen:'TransaksiSelesai'})}>
+                        <Text style={styles.text}>Selesai</Text>
+                    </TouchableOpacity>
+                  </View>
+                  
+                
+                </View>
+
+                
+                <View style={styles.NavBackContainer}>
               
-              <View style={styles.NavBackContainer}>
-            
-              </View>
-              <View>
-              <FlatList
-                data={this.state.data}
-                renderItem = {this._renderItem}
-                keyExtractor={(item, index)=> index.toString()}
-                extraData={
-                  this.state.selectedId     // for single item
-                }
-                numColumns = {numColumn}
-                />
-              </View>
+                </View>
+                <View>
+                <FlatList
+                  data={this.state.data}
+                  renderItem = {this._renderItem}
+                  keyExtractor={(item, index)=> index.toString()}
+                  extraData={
+                    this.state.selectedId     // for single item
+                  }
+                  numColumns = {numColumn}
+                  />
+                </View>
+              </GestureRecognizer>
           </ScrollView>
         </SafeAreaView>  
     
@@ -227,7 +261,6 @@ const styles = StyleSheet.create({
     container: {
       flex: 1,
       backgroundColor: '#1F1D2A',
-   
     },
     NavBackContainer : {
        

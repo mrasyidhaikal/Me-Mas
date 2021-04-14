@@ -10,7 +10,7 @@ import moment from 'moment';
 const { width: WIDTH} = Dimensions.get('window');
 const windowHeight = Dimensions.get('window').height;
 const numColumn = 1
-class detailJualTransaction extends React.Component{
+class detailBeliTransaction extends React.Component{
   
     constructor() {
         super()
@@ -31,9 +31,10 @@ class detailJualTransaction extends React.Component{
             data:[],
             total:0,
             dataBank:{},
-            hargaJual:0,
+            hargaBeli:0,
             bankuserid:"",
             userBankName:"",
+            namaBank:"",
 
             dateTransaksi:Date(),
 
@@ -55,18 +56,20 @@ class detailJualTransaction extends React.Component{
         const url = `http://104.248.156.113:8024/api/v1/Dashboard/GetTransaksi/${transactionID}`
         const response = await CallAPIData.getEmas(token,url)
         const {data,statusCode} = response
-        this.setState({data:data,total:data.total,transaksidate:data.transaksidate,hargaJual:data.harga,bankuserid:data.bankuserid})
+        this.setState({data:data,total:data.total,transaksidate:data.transaksidate,hargaBeli:data.harga,bankid:data.bankid})
+        
+        console.log(data.bankid)
 
         this.getBank()
-        this.getBankUser()
+        this.getBankName()
         var dateTransaksii = new Date(this.state.data.transaksidate)
         this.setState({dateTransaksi:moment(dateTransaksii).add(3, "hours").format("YYYY-MM-DD HH:mm")})
-        
 
       }
+
       currencyFormat(num) {
         return 'Rp ' + num.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')
-     }
+      }
 
      showToast = () => {
       ToastAndroid.show("Text Copied !", ToastAndroid.SHORT);
@@ -84,19 +87,19 @@ class detailJualTransaction extends React.Component{
       const response = await CallAPIData.getEmas(token,url)
       const {data,statusCode} = response
     
+
       this.setState({dataBank:data})
-
     }
-    getBankUser = async() =>{
-      const token = await CallAsyncData.getData('token')
 
+    getBankName = async() =>{
+      const token = await CallAsyncData.getData('token')
     
-      const url = `http://104.248.156.113:8024/api/v1/Dashboard/GetBankUser/${this.state.bankuserid}`
+      const url = `http://104.248.156.113:8024/api/v1/Dashboard/GetBankById/${this.state.bankid}`
       const response = await CallAPIData.getEmas(token,url)
 
       const {data,statusCode} = response
-    
-      this.setState({userBankName:data.bankname})
+      // console.log(data)
+      this.setState({namaBank:data.bankname})
 
     }
 
@@ -134,8 +137,6 @@ class detailJualTransaction extends React.Component{
 
       const { navigation } = this.props;
 
-
-     
     return(
         
         <View style={styles.container}>
@@ -175,7 +176,7 @@ class detailJualTransaction extends React.Component{
                   </View>
                   <View style={styles.row}>
                     <Text style={styles.texthead}>Deskripsi</Text>
-                    <Text style={styles.text}>{'Penjualan Emas'}</Text>
+                    <Text style={styles.text}>{'Pembelian Emas'}</Text>
                   </View>
                   <View style={styles.rowdivider}>
                   </View>
@@ -184,12 +185,12 @@ class detailJualTransaction extends React.Component{
                     <Text style={styles.text}>{moment(this.state.data.datetransaksi).format("DD MMM YYYY")}</Text>
                   </View>
                   <View style={styles.row}>
-                    <Text style={styles.texthead}>Harga Jual Emas</Text>
-                    <Text style={styles.text}>{this.currencyFormat(this.state.hargaJual)+"/gr"}</Text>
+                    <Text style={styles.texthead}>Harga Beli Emas</Text>
+                    <Text style={styles.text}>{this.currencyFormat(this.state.hargaBeli)+"/gr"}</Text>
                   </View>
                   <View style={styles.row}>
                     <Text style={styles.texthead}>Bank</Text>
-                    <Text style={styles.text}>{this.state.userBankName}</Text>
+                    <Text style={styles.text}>{this.state.namaBank}</Text>
                   </View>
         </View>
         <View style={styles.btnBackground}>
@@ -280,7 +281,7 @@ class detailJualTransaction extends React.Component{
 }
 
 
-export default detailJualTransaction
+export default detailBeliTransaction
 
 
 const styles = StyleSheet.create({

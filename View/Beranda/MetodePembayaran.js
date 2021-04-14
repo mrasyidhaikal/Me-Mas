@@ -38,7 +38,7 @@ class Metode extends React.Component{
       const { navigation,route } = this.props;  
       const { hargaBeliToday,token,userid,berat } = route.params;
       var harga = berat * hargaBeliToday
-      console.log(harga)
+      // console.log(harga)
 
       if(harga >= 499999){
         return(      

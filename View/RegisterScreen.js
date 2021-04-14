@@ -33,7 +33,8 @@ class Register extends React.Component{
 
     handleConfirm=(date)=>{
         this.setState({DateDisplay:date})
-      
+        this.setState({visibility:false})
+        this.setState({TextInputDisableStatus:true})
     }
     onPressCancel=()=>{
         this.setState({visibility:false})

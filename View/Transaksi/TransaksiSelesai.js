@@ -8,6 +8,9 @@ import CallAsyncData from './../../Controller/CallAsyncData';
 import CallAPIData from './../../Controller/CallAPI';
 import Icon from 'react-native-vector-icons/Ionicons'
 import moment from 'moment';
+import GestureRecognizer, {swipeDirections} from 'react-native-swipe-gestures';
+
+
 const { width: WIDTH} = Dimensions.get('window');
 const windowHeight = Dimensions.get('window').height;
 
@@ -30,13 +33,14 @@ class TransaksiSelesai extends React.Component{
             data : [],
             selectedId:'',
             harga : 0,
+            gestureName: 'none',
             refreshing: false,
         }
     }
 
     _renderItem =({item,index}) =>{
     
-        if(item.transaksitype == 'Jual' && item.status == 'Batal' || item.status == 'Selesai'){
+        if(item.transaksitype == 'Jual' && (item.status == 'Batal' || item.status == 'Selesai')){
           return(
     
             <TouchableOpacity style={styles.item} onPress={() => this.checkTransaction(item.transaksiid,item.transaksitype)}>
@@ -72,7 +76,7 @@ class TransaksiSelesai extends React.Component{
             </TouchableOpacity>
         
         )
-        }else if(item.transaksitype == 'Beli' && item.status =='Batal' || item.status == 'Selesai'){
+        }else if(item.transaksitype == 'Beli' && (item.status =='Batal' || item.status == 'Selesai')){
           return(
     
             <TouchableOpacity style={styles.item} onPress={() => this.checkTransaction(item.transaksiid,item.transaksitype)}>
@@ -114,7 +118,7 @@ class TransaksiSelesai extends React.Component{
     checkTransaction = (transactionID,transaksitype) =>{
           const { navigation } = this.props;  
           if(transaksitype == 'Beli'){
-              navigation.navigate('detailTransaction',{transactionID:transactionID})
+              navigation.navigate('detailBeliTransaction',{transactionID:transactionID})
           }else if(transaksitype == 'Jual'){
                navigation.navigate('detailJualTransaction',{transactionID:transactionID})
           }
@@ -147,6 +151,22 @@ class TransaksiSelesai extends React.Component{
        }
     }
 
+    
+    onSwipe(gestureName, gestureState) {
+      const {SWIPE_UP, SWIPE_DOWN, SWIPE_LEFT, SWIPE_RIGHT} = swipeDirections;
+       const { navigation,route } = this.props;
+      //  console.log(gestureName)
+      this.setState({gestureName: gestureName});
+      switch (gestureName) {
+        case SWIPE_RIGHT:
+
+            navigation.navigate('Transaksi')
+
+          break;
+      }
+    }
+
+
     getBank = () => {
        
        
@@ -163,13 +183,23 @@ class TransaksiSelesai extends React.Component{
     render(){
      
       const { navigation } = this.props;
+
+      const config = {
+        velocityThreshold: 0.3,
+        directionalOffsetThreshold: 50
+      };
+      
       
     return(
         
-        <View style={styles.container}>
-           
+        <View style={styles.container}> 
+          <GestureRecognizer
+              onSwipe={(direction, state) => this.onSwipe(direction, state)}
+              config={config}
+              >
         <SafeAreaView>
           <ScrollView
+            style={{height:windowHeight}}
             refreshControl={
               <RefreshControl
                 refreshing={this.state.refreshing}
@@ -177,6 +207,7 @@ class TransaksiSelesai extends React.Component{
               />
             }
           >
+
               <View style={styles.NavBackContainer}>
                 
                   <View>
@@ -212,6 +243,7 @@ class TransaksiSelesai extends React.Component{
               </View>
           </ScrollView>
         </SafeAreaView>  
+      </GestureRecognizer>
     
       </View>
       

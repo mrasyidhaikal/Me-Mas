@@ -70,6 +70,7 @@ class pinConfirmation extends React.Component{
       }),this.props.route.params.token
         )
         const {data,statusCode} = response
+        // console.log(data)
         if (statusCode == 200) {
           if (response.data.success == false){
               Alert.alert("Transaksi Gagal!",data.head,[

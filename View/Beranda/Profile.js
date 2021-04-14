@@ -87,7 +87,8 @@ class Profile extends React.Component{
             </TouchableOpacity>
             <View style={{flexDirection:'row', justifyContent:'space-between'}}>
             <Text style={styles.logoText}>Pengaturan Akun</Text>
-            <Image source={require("./../../assets/profile.png")} style={{marginRight:30,}} />    
+            {/* <Image source={require("./../../assets/profile.png")} style={{marginRight:30,}} />     */}
+            <Icon name={'person-circle-outline'} size={56} color={'#fff'} style={{marginRight:30}}></Icon>
             </View>
          
         </View>

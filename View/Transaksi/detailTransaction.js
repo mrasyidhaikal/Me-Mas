@@ -137,6 +137,12 @@ class detailTransaction extends React.Component{
 
         <View style={styles.detailHarga}>
                   <View style={styles.row}>
+                    <Text style={styles.texthead}>Status</Text>
+                    <Text style={styles.text}>{this.state.data.status}</Text>
+                  </View>
+                  <View style={styles.rowdivider}>
+                  </View>
+                  <View style={styles.row}>
                     <Text style={styles.texthead}>No Transaksi</Text>
                     <Text style={styles.text}>{this.state.data.transaksicode}</Text>
                   </View>
@@ -279,6 +285,16 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius:20,
     borderBottomRightRadius:20,
     paddingVertical:5,
+  },
+  rowdivider :{
+    flexDirection:'row',
+    justifyContent:'space-between',
+    marginHorizontal:15,
+    borderBottomColor: '#f5f5f5',
+    borderBottomWidth:1,
+    borderBottomLeftRadius:20,
+    borderBottomRightRadius:20,
+    paddingVertical:10,
   },
   rowText :{
     flexDirection:'row',

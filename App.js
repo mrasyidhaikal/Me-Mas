@@ -26,6 +26,7 @@ import pinConfirmation from './View/Beranda/PinConfirmation'
 import detail from './View/Beranda/detail'
 import detailTransaction from './View/Transaksi/detailTransaction'
 import detailJualTransaction from './View/Transaksi/detailJualTransaction'
+import detailBeliTransaction from './View/Transaksi/detailBeliTransaction'
 import DataRekening from './View/Beranda/DataRekening'
 import TambahKartu from './View/Beranda/TambahKartu'
 import UpdateKartu from './View/Beranda/UpdateKartu'
@@ -41,17 +42,7 @@ const Tab = createBottomTabNavigator();
 const RegisterStack = createStackNavigator();
 const HomeStack = createStackNavigator();
 const TransaksiStack = createStackNavigator();
-const IsiHomeStack = createStackNavigator();
 
-// const IsiHomeStacks = () => {
-//   return(
-//     <IsiHomeStack.Navigator
-//     screenOptions={{ gestureEnabled: false, headerShown: false }}
-//     >
-     
-//     </IsiHomeStack.Navigator>
-//     )
-// } 
 
 const RegisterTab = () => {
   return(
@@ -84,17 +75,10 @@ const RegisterTab = () => {
 }
 
 const HomeStackScreen = ({navigation,route}) =>{
-  // if(route.state && route.state.index > 0){
-  //   navigation.setOptions({tabBarVisible : false})
-  // }else{
-  //   navigation.setOptions({tabBarVisible : true})
-  // }
-
   return(
   <HomeStack.Navigator
-  screenOptions={{ gestureEnabled: false, headerShown: false }}
-  >
-    <HomeStack.Screen name="Beranda" component={Beranda}  />
+  screenOptions={{ gestureEnabled: false, headerShown: false }}>
+    <HomeStack.Screen name="AppTabs" component={AppTabs}  />
     <HomeStack.Screen name="Grafik" component={GrafikScreen}  />
 
     <HomeStack.Screen name="Profile" component={Profile}  />
@@ -104,10 +88,6 @@ const HomeStackScreen = ({navigation,route}) =>{
     <HomeStack.Screen name="detail" component={detailTransaction} />
     <HomeStack.Screen name="detailJual" component={detailJualTransaction} />
     <HomeStack.Screen name="jualEmas" component={JualEmas} />
-    {/* <HomeStack.Screen 
-      name="IsiHomeStack" 
-      component={IsiHomeStacks}
-    /> */}
 
     <HomeStack.Screen name="UpdateKartu" component={UpdateKartu} />
     <HomeStack.Screen name="DataRekening" component={DataRekening} />
@@ -117,6 +97,7 @@ const HomeStackScreen = ({navigation,route}) =>{
     <HomeStack.Screen name="ChangePassword" component={ChangePassword} />
     <HomeStack.Screen name="ChangePin" component={ChangePin} />
     <HomeStack.Screen name="Login" component={RegisterTab} />
+    <HomeStack.Screen name="TransaksiStackScreen" component={TransaksiStackScreen} />
 
   </HomeStack.Navigator>
   )
@@ -125,12 +106,13 @@ const HomeStackScreen = ({navigation,route}) =>{
 const TransaksiStackScreen = () =>{
   return(
   <TransaksiStack.Navigator
-  screenOptions={{ gestureEnabled: false, headerShown: false }}
-  >
-    <TransaksiStack.Screen name="Transaksi" component={Transaksi}  />
+  screenOptions={{ gestureEnabled: false, headerShown: false }}>   
+    
     <TransaksiStack.Screen name="detailTransaction" component={detailTransaction} />
     <TransaksiStack.Screen name="detailJualTransaction" component={detailJualTransaction} />
+    <TransaksiStack.Screen name="detailBeliTransaction" component={detailBeliTransaction} />
     <TransaksiStack.Screen name="TransaksiSelesai" component={TransaksiSelesai} />
+
   </TransaksiStack.Navigator>
   )
 }
@@ -151,7 +133,7 @@ const AppTabs = () =>{
     }}
     >
   
-      <Tab.Screen name="Beranda" component={HomeStackScreen} 
+      <Tab.Screen name="Beranda" component={Beranda} 
       options={{
         tabBarLabel: 'Beranda',
         
@@ -160,9 +142,8 @@ const AppTabs = () =>{
         ),
       }}
       />
-      <Tab.Screen name="Transaksi" component={TransaksiStackScreen}
+      <Tab.Screen name="Transaksi" component={Transaksi}
       options={{
-
         tabBarIcon: ({color}) => (
           <Icon name="ios-cart-outline" color={color} size={26} />
         ),
@@ -204,8 +185,8 @@ UserData = async() => {
       >
     {this.state.tokenUser ?(
        <AuthStack.Screen
-       name="AppTabs"
-       component={AppTabs}
+       name="HomeStackScreen"
+       component={HomeStackScreen}
      />
     ): (
       <AuthStack.Screen
@@ -213,11 +194,6 @@ UserData = async() => {
       component={RegisterTab}
     />
     )}
-    
-   
-
-
-
     
   </AuthStack.Navigator>
     </NavigationContainer>

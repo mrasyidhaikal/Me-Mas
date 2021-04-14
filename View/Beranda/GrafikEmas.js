@@ -31,7 +31,7 @@ const windowHeight = Dimensions.get('window').height;
             hargaBeliToday:0,
             beliPersen:0,
             iconBeli:'',
-            warnaBeli:'',
+            warnaBeli:'#fff',
           }
       }
   

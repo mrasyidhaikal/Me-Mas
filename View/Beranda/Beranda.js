@@ -159,14 +159,15 @@ class login extends React.Component{
            </View>
 
            <View style={styles.header}>
-                <TouchableOpacity onPress={() => navigation.push("Profile")}> 
-                <Image source={require("./../../assets/profile.png")}/>
+                <TouchableOpacity onPress={() =>  navigation.push("Profile")}> 
+                {/* <Image source={require("./../../assets/profile.png")}/> */}
+                <Icon name={'person-circle-outline'} size={56} color={'#fff'}></Icon>
                 </TouchableOpacity>
                 <View style={styles.welcome}>
                   <Text  style={styles.text}>Selamat Datang,</Text>
                   <Text style={{color:'#fff',fontWeight:'bold',fontSize:25}}>{this.state.namaUser}</Text>
                 </View>
-                <Icon name={'ios-notifications-outline'} size={24} color={'#fff'} />
+                <Icon name={'ios-notifications-outline'} size={28} color={'#fff'} style={{marginRight:20}} />
            </View>
            
 
@@ -226,7 +227,7 @@ class login extends React.Component{
        
               
               <TouchableOpacity style={styles.cardTransactionContentBeli} onPress={() => navigation.navigate('beliEmas',{hargaBeliToday:this.state.hargaBeliToday,token:this.state.token,userid:this.state.userid}) }>
-                    <Icon name={'trending-up-sharp'} size={54} color={'#fff'} />
+                    <Icon name={'enter-outline'} size={54} color={'#fff'} />
                     <Text style={styles.text}>Beli</Text>
               </TouchableOpacity>
              
@@ -236,7 +237,7 @@ class login extends React.Component{
               </TouchableOpacity> */}
              
               <TouchableOpacity style={styles.cardTransactionContentTransfer} onPress={() => navigation.navigate('jualEmas',{hargaJualToday:this.state.hargaJualToday,token:this.state.token,userid:this.state.userid,saldoUang:this.state.saldoUang,userSaldo:this.state.userSaldo}) } >
-                    <Icon name={'ios-arrow-up-sharp'} size={54} color={'#fff'} />
+                    <Icon name={'exit-outline'} size={54} color={'#fff'} />
                     <Text style={styles.text}>Jual</Text>
               </TouchableOpacity>
            
