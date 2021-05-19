@@ -31,7 +31,7 @@ const windowHeight = Dimensions.get('window').height;
             hargaBeliToday:0,
             beliPersen:0,
             iconBeli:'',
-            warnaBeli:'',
+            warnaBeli:'#fff',
           }
       }
   
@@ -93,9 +93,26 @@ const windowHeight = Dimensions.get('window').height;
         return 'Rp ' + num.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')
      }
 
+     _renderItem =({item,index}) =>{
+
+        return(
+
+          <View>
+              <Image style={styles.imageBank}   
+                  source={{
+                  uri: item.urlicon,
+                  }}/> 
+          </View>
+         
+         )
+      
+}
       componentDidMount(){
         this.getHarga()
        }
+       componentWillUnmount() {
+        this._isMounted = false;
+      }
     
 render(){
   const { navigation,route } = this.props;  

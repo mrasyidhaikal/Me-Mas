@@ -120,7 +120,7 @@ class ListKartu extends React.Component{
                 <Icon name={'ios-chevron-back-sharp'} size={25} color={'#fff'}/>
             </TouchableOpacity>
             <View style={{flexDirection:'row', justifyContent:'space-between'}}>
-            <Text style={styles.logoText}>Pilih Rekening Penerima</Text>
+            <Text style={styles.logoText}>Registration</Text>
             </View>
          
         </View>

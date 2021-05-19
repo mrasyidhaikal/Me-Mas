@@ -38,7 +38,9 @@ class login extends React.Component{
            
         }
     }
-    
+    componentWillUnmount() {
+      this._isMounted = false;
+    }
     // componentDidMount(){
     //   this.timer = setInterval(()=> this.checkExpire(), 10000,true)
     //  }
